@@ -51,7 +51,7 @@ ikTool.run();
 %dos(['ik -S ',setupFile]);
 %cd(matlabdir);
 
-%Save the log file
+%Save the log file in a Log folder for each trial
 % logFolder=[results_directory '\Log'];
 % if exist(logFolder,'dir') ~= 7
 %     mkdir (logFolder);
