@@ -27,6 +27,8 @@ inputTrials=trialsList; %list of input trials includes all trials
 %WARNING: REMEMBER to modify the following function: it has hard coded setting!!!
 [anglesToPlot,IKxlabel]=settingIKplot();
 
+%to select anglesToPlot from GUI
+% [anglesToPlot,xlabel]=settingIKplot(model_file)
 
 plotProcessingResults(IKtrialsOutputDir,'ik.mot',anglesToPlot,IKxlabel)
 

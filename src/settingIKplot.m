@@ -1,5 +1,5 @@
 function [dofsToPlot,xlabel]=settingIKplot(model_file, varargin)
-% Function to set plot of results 
+% Function to set plot of results from IK
 %
 % Copyright (C) 2014 Alice Mantoan, Monica Reggiani
 % Alice Mantoan, Monica Reggiani
