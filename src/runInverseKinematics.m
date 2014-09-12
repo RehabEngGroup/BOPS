@@ -1,4 +1,4 @@
-function [IKoutputDir,IKtrialsOutputDir, varargout] = runInverseKinematics(inputDir,inputTrials, model_file, IKTemplateXml, ikID)
+function [IKoutputDir,IKtrialsOutputDir, varargout] = runInverseKinematics(inputDir,inputTrials, model_file, IKTemplateXml, IKid)
 % Function to run IK for multiple trials
 %
 % Copyright (C) 2014 Alice Mantoan, Monica Reggiani
@@ -9,9 +9,10 @@ function [IKoutputDir,IKtrialsOutputDir, varargout] = runInverseKinematics(input
 import org.opensim.modeling.*
 
 %Definition of output folders
-[IKoutputDir, IKtrialsOutputDir] = outputFoldersDefinition(inputDir, inputTrials, ikID, 'IK');
+[IKoutputDir, IKtrialsOutputDir] = outputFoldersDefinition(inputDir, inputTrials, IKid, 'IK');
 
-trcFullFileName = trcListGeneration(inputDir, inputTrials);
+%trcFullFileName = trcListGeneration(inputDir, inputTrials);
+trcFullFileName = inputFilesListGeneration(inputDir, inputTrials, '.trc');
 %to have also the relative path:
 %[trcFullFileName, trcRelativePath] = trcListGeneration(inputDir, inputTrials);
 

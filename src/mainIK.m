@@ -32,5 +32,5 @@ inputTrials=trialsList; %list of input trials includes all trials
 
 plotProcessingResults(IKtrialsOutputDir,'ik.mot',anglesToPlot,IKxlabel)
 
-plotResultsTogheter(IKoutputDir,trialsList, 'ik.mot', anglesToPlot,IKxlabel)
+plotResultsTogheter(IKoutputDir,inputTrials, 'ik.mot', anglesToPlot,IKxlabel)
 
