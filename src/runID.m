@@ -15,6 +15,10 @@ idTool = InverseDynamicsTool();
 idTool.setModel(osimModel);
 idTool.setModelFileName(osimModel.getDocumentFileName());
 
+%Set Input
+idTool.setCoordinatesFileName(coordinates_file);
+idTool.setLowpassCutoffFrequency(lowpassfcut);
+
 % Get mot data to determine time range
 motData = Storage(coordinates_file);
 
@@ -22,6 +26,21 @@ motData = Storage(coordinates_file);
 initial_time = motData.getFirstTime();
 final_time = motData.getLastTime();
 
+idTool.setStartTime(initial_time);
+idTool.setEndTime(final_time);
+
+%Set folders
+idTool.setResultsDir(results_directory);
+idTool.setOutputGenForceFileName([ 'inverse_dynamics.sto' ]);
+
+%retrieve input dir
+index=strfind(coordinates_file, '\ik');
+idTool.setInputsDir(coordinates_file(1:index));
+
+%Set forces_to_exclude
+excludedForces = ArrayStr();
+excludedForces.append('Muscles');
+idTool.setExcludedForces(excludedForces);
 
 %External Load File
 externForcesTree = xml_read(genericExtLoadFullPath);
@@ -29,50 +48,29 @@ externForcesTree = xml_read(genericExtLoadFullPath);
 externForcesTree.ExternalLoads.datafile = GRFmot_file;
 externForcesTree.ExternalLoads.external_loads_model_kinematics_file = coordinates_file;
 
-if nargin<6
+if nargin<6 %if lowpassfcut is not defined by the user, it is taken from XML Template for external loads
     lowpassfcut=externForcesTree.ExternalLoads.lowpass_cutoff_frequency_for_load_kinematics;
 end
-%externForcesTree.ExternalLoads.lowpass_cutoff_frequency_for_load_kinematics = lowpassfcut;
 
-% Create name for a subject specific external loads xml
+% Create name for the external loads xml file
 extLoadsXml = 'external_loads.xml';
 
-xml_write([results_directory '\' extLoadsXml], externForcesTree, 'OpenSimDocument');
-    
-    
-idTool.setResultsDir(results_directory);
-
-%retrieve input dir
-index=strfind(coordinates_file, '\ik');
-idTool.setInputsDir(coordinates_file(1:index));
-
-
-idTool.setStartTime(initial_time);
-idTool.setEndTime(final_time);
-
-excludedForces = ArrayStr();
-excludedForces.append('Muscles');
-idTool.setExcludedForces(excludedForces);
-
-idTool.setExternalLoadsFileName([results_directory '\' extLoadsXml]);
-
-idTool.setCoordinatesFileName(coordinates_file);
-idTool.setLowpassCutoffFrequency(lowpassfcut);
-idTool.setOutputGenForceFileName([ 'inverse_dynamics.sto' ]);
-
-% Save the settings in a setup file
-setupFile = 'setup_ID.xml';
-
+% Save the settings in the Setup folder
 setupFileDir=[results_directory '\Setup'];
 
 if exist(setupFileDir,'dir') ~= 7
     mkdir (setupFileDir);
 end
 
+%Write and then set External Load setup file
+xml_write([setupFileDir '\' extLoadsXml], externForcesTree, 'OpenSimDocument');
+idTool.setExternalLoadsFileName([setupFileDir '\' extLoadsXml]);
+
+%Print ID setup file
+setupFile = 'setup_ID.xml';
 idTool.print([setupFileDir '\' setupFile]);
 
-fprintf([ 'Performing ID \n'])
-
+%Run ID
 matlabdir=pwd;
 cd([setupFileDir])
 dos(['id -S ',setupFile]);
