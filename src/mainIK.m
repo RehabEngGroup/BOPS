@@ -33,6 +33,6 @@ inputTrials=trialsList; %list of input trials includes all trials
 %Plot results for each trial
 plotProcessingResults(IKtrialsOutputDir,'ik.mot',anglesToPlot,IKxlabel)
 
-%Plot results of all trials together
-plotResultsTogheter(IKoutputDir,inputTrials, 'ik.mot', anglesToPlot,IKxlabel)
+%Plot results of all input trials together
+plotResultsMultipleTrials(IKoutputDir,inputTrials, 'ik.mot', anglesToPlot,IKxlabel)
 

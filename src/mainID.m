@@ -45,5 +45,5 @@ inputTrials=trialsList; %list of input trials includes all trials
 %Plot results for each trial
 plotProcessingResults(IDtrialsOutputDir,'inverse_dynamics.sto',momentsToPlot,IDxlabel)
 
-%Plot results of all trials together
-plotResultsTogheter(IDoutputDir,inputTrials, 'inverse_dynamics.sto', momentsToPlot,IDxlabel)
+%Plot results of all input trials together
+plotResultsMultipleTrials(IDoutputDir,inputTrials, 'inverse_dynamics.sto', momentsToPlot,IDxlabel)

@@ -1,5 +1,5 @@
-function []=plotResultsTogheter(resultsPath, trialsList, filename, Yquantities,x)
-% Function to plot results from all trials
+function []=plotResultsMultipleTrials(resultsPath, trialsList, filename, Yquantities,x)
+% Function to plot results from multiple trials
 %
 % Copyright (C) 2014 Alice Mantoan, Monica Reggiani
 % Alice Mantoan, Monica Reggiani
