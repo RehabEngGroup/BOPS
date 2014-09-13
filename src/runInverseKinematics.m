@@ -11,10 +11,9 @@ import org.opensim.modeling.*
 %Definition of output folders
 [IKoutputDir, IKtrialsOutputDir] = outputFoldersDefinition(inputDir, inputTrials, IKid, 'IK');
 
-%trcFullFileName = trcListGeneration(inputDir, inputTrials);
 trcFullFileName = inputFilesListGeneration(inputDir, inputTrials, '.trc');
 %to have also the relative path:
-%[trcFullFileName, trcRelativePath] = trcListGeneration(inputDir, inputTrials);
+%[trcFullFileName, trcRelativePath] = inputFilesListGeneration(inputDir, inputTrials, '.trc');
 
 
 %% Get the model
