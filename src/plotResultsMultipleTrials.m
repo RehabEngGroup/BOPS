@@ -51,6 +51,7 @@ end
 save([figurePath, 'plottedData'], 'y')
 
 plotLabels=regexprep(Yquantities, '_', ' ');
+legendLabels=regexprep(trialsList, '_', ' ');
 cmap = colormap(hsv);
 %plotTitle = filename;
 
@@ -68,7 +69,7 @@ for k=1:size(y,1)
         xlabel(x)
         ylabel([plotLabels(j)])
         warning off
-        legend(trialsList)
+        legend(legendLabels)
         %title(filename)
         
         saveas(h(j),[figurePath  Yquantities{j} '.fig'])
