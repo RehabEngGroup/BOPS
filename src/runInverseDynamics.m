@@ -43,7 +43,3 @@ for k=1:nTrials
         runID(osimModel, coordinates_file, GRFmot_file, IDextLoadTemplate, results_directory)
     end
 end
-
-%Save the log file
-copyfile('out.log',[IDoutputDir 'out.log'])
-

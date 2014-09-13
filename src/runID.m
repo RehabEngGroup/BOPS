@@ -72,9 +72,16 @@ idTool.print([setupFileDir '\' setupFile]);
 
 %Run ID
 matlabdir=pwd;
-cd([setupFileDir])
+cd(setupFileDir)
 dos(['id -S ',setupFile]);
 cd(matlabdir);
+%Alternatively (but you need to comment all the following logging part):
 %idTool.run();
 
-
+%Save the log file in a Log folder for each trial
+logFolder=[results_directory '\Log'];
+if exist(logFolder,'dir') ~= 7
+    mkdir (logFolder);
+end
+movefile([setupFileDir '\out.log'],[logFolder '\out.log'])
+movefile([setupFileDir '\err.log'],[logFolder '\err.log'])
