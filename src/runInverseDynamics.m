@@ -11,7 +11,7 @@ import org.opensim.modeling.*
 %Definition of output folders
 [IDoutputDir, IDtrialsOutputDir] = outputFoldersDefinition(inputDir, inputTrials, IDid, 'ID');
 
-
+%Definition of input files lists
 [IKmotFullFileName] = inputFilesListGeneration(IKmotDir, inputTrials, '.mot');
 
 [GRFmotFullFileName] = inputFilesListGeneration(inputDir, inputTrials, '.mot');

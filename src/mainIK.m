@@ -25,12 +25,14 @@ inputTrials=trialsList; %list of input trials includes all trials
 %% Plotting
 
 %WARNING: REMEMBER to modify the following function: it has hard coded setting!!!
-[anglesToPlot,IKxlabel]=settingIKplot();
+%[anglesToPlot,IKxlabel]=settingIKplot();
 
-%to select anglesToPlot from GUI
-% [anglesToPlot,xlabel]=settingIKplot(model_file)
+%To avoid hard coded settings: selection of anglesToPlot from GUI
+[anglesToPlot,IKxlabel]=settingIKplot(model_file);
 
+%Plot results for each trial
 plotProcessingResults(IKtrialsOutputDir,'ik.mot',anglesToPlot,IKxlabel)
 
+%Plot results of all trials together
 plotResultsTogheter(IKoutputDir,inputTrials, 'ik.mot', anglesToPlot,IKxlabel)
 
