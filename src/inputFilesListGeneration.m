@@ -9,19 +9,17 @@ function [FullFileName, RelativeFilePath] = inputFilesListGeneration(inputDir, t
 
 nTrials=length(trialsList);
 
-%trc list
 for k=1:nTrials
     
     inputTrialsFullFilePaths{k}=[inputDir '\' trialsList{k}];
     
     switch tag
         case '.trc'
-            
-            
+                      
             FileName{k}=dir([inputTrialsFullFilePaths{k} '\*.trc']);
             nFile=1;
             
-        case '.mot'
+        case '.mot' %include results from IK (ik.mot) and .mot storing GRF
             
             FileName{k}=dir([inputTrialsFullFilePaths{k} '\*.mot']);
             
