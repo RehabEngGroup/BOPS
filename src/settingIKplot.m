@@ -9,12 +9,12 @@ function [dofsToPlot,xlabel]=settingIKplot(model_file, varargin)
 
 import org.opensim.modeling.*
 
-%Definition of Dof for plotting
+%1- Definition of Dof for plotting
 if nargin==1
     
     dofs=getDofsFromModel(model_file);
     
-    [selectedDofsIndex,v] = listdlg('PromptString','Select x-axis for plots:',...
+    [selectedDofsIndex,v] = listdlg('PromptString','Select dofs for plots:',...
         'SelectionMode','multiple',...
         'ListString',dofs);
     
@@ -24,7 +24,7 @@ else
     %WARNING: BE SURE to change this HARD-CODED values
     
     %remember to change the side
-    side='r';
+    side='l';
     
     dofsToPlot={
         strcat('hip_flexion_',side);
@@ -37,20 +37,19 @@ else
 end
 
 
-%Set x-axis
+%2- Set x-axis
 
 %default value
 xlabel='% Analysis Window';
 
-
 %Possible choices
 %Uncomment this part if you want to ask to the user 
 % x_labels={
-%     'time [s]';
+%     '% Analysis Window';
 %     '% stance';
 %     '% gait cycle';
 %     '% time';
-%     '% Analysis Window';
+%     'time [s]';
 %     };
 % 
 % [xlabelIndex,v] = listdlg('PromptString','Select x-axis for plots:',...

@@ -66,11 +66,11 @@ xlabel='% Analysis Window';
 %Possible choices
 %Uncomment this part if you want to ask to the user 
 % x_labels={
-%     'time [s]';
+%     '% Analysis Window';
 %     '% stance';
 %     '% gait cycle';
 %     '% time';
-%     '% Analysis Window';
+%     'time [s]';
 %     };
 % 
 % [xlabelIndex,v] = listdlg('PromptString','Select x-axis for plots:',...
