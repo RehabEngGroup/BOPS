@@ -20,6 +20,10 @@ switch tag
         
         outputDir=[inputDir(1:ind) 'inverseDynamics\' elaborationID '\'];
         
+    case 'SO'
+        
+        outputDir=[inputDir(1:ind) 'staticOptimization\' elaborationID '\'];
+        
     otherwise
         error ([tag ' case missing. Check function outputFoldersDefinition.m'])
 end

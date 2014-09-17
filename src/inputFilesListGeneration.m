@@ -36,7 +36,18 @@ for k=1:nTrials
                 end
             else
                 nFile=1;
-            end        
+            end  
+            
+        case '.xml'
+            
+            nFile=1;
+            %FileName{k}=dir([inputTrialsFullFilePaths{k} '\Setup\external_loads.xml']);
+            FileName{k}(nFile).name=[ 'Setup\external_loads.xml'];
+          
+            
+        otherwise
+            error ([tag ' case missing. Check function inputFilesListGeneration.m'])
+            
     end
     
     FullFileName{k}=[inputTrialsFullFilePaths{k} '\' FileName{k}(nFile).name];
