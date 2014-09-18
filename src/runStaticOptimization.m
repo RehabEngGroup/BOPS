@@ -1,5 +1,5 @@
-function [SOoutputDir, SOtrialsOutputDir]=runStaticOptimization(inputDir, inputTrials, model_file, IKmotDir, IDresultDir, SOid, force_set_files, fcut_coordinates, varargin)
-% Function to run ID for multiple trials
+function [SOoutputDir, SOtrialsOutputDir]=runStaticOptimization(inputDir, inputTrials, model_file, IKmotDir, IDresultDir, SOid, force_set_files, XMLTemplate, fcut_coordinates, varargin)
+% Function to run SO for multiple trials
 %
 % Copyright (C) 2014 Alice Mantoan, Monica Reggiani
 % Alice Mantoan, Monica Reggiani
@@ -15,19 +15,17 @@ import org.opensim.modeling.*
 [IKmotFullFileName] = inputFilesListGeneration(IKmotDir, inputTrials, '.mot');
 
 [ExtLoadXmlFullFileName] = inputFilesListGeneration(IDresultDir, inputTrials, '.xml');
-%for both case you can have also the relative path:
-%[GRFmotFullFileName, GRFmotRelativePath] = inputFilesListGeneration(inputDir, inputTrials, '.mot');
 
-
-%% Get the model
-osimModel = Model(model_file);
-osimModel.initSystem();
 
 %%
 nTrials= length(inputTrials);
 
 for k=1:nTrials
     
+    %Get the model
+    osimModel = Model(model_file);
+    osimModel.initSystem();
+           
     results_directory=SOtrialsOutputDir{k};
            
     if exist(results_directory,'dir') ~= 7
@@ -38,13 +36,21 @@ for k=1:nTrials
     external_loads_file=ExtLoadXmlFullFileName{k};
     
     switch nargin
-        case 8           
-            runSO(osimModel, coordinates_file, external_loads_file, results_directory, force_set_files, fcut_coordinates)
+           
+        case 8  %until there will be probl creating a Static Optimization object with API
+            runSO(osimModel, coordinates_file, external_loads_file, results_directory, force_set_files, XMLTemplate)
             
-        case 7
-            runSO(osimModel, coordinates_file, external_loads_file, results_directory, force_set_files)
-        
+        case 7  %it will be the optimal case when API problems will be solved
+            runSO(osimModel, coordinates_file, external_loads_file, results_directory, force_set_files)            
+            
+        %both very rare
         case 6
-            runSO(osimModel, coordinates_file, external_loads_file, results_directory)
+            runSO(osimModel, coordinates_file, external_loads_file, results_directory) % not using Actuators
+            
+        case 9
+            runSO(osimModel, coordinates_file, external_loads_file, results_directory, force_set_files, XMLTemplate, fcut_coordinates)
     end
+    
+    clear  osimModel external_loads_file coordinates_file results_directory
+    
 end

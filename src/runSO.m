@@ -1,12 +1,13 @@
-function []=runSO(osimModel, coordinates_file, external_loads_file, results_directory, force_set_files, lowpassfcut, varargin)
+function []=runSO(osimModel, coordinates_file, external_loads_file, results_directory, force_set_files, XMLTemplate, lowpassfcut, varargin)
 % Function to run SO for a single trial
-%input
+%input:
 %model_file
 %coordinates_file
-%lowpassfcut (optional)
-%results_directory
 %external_loads_file
-%force_set_files
+%results_directory
+%force_set_files (optional, but usually used)
+%XMLTemplate (used until problems with API will be solved)
+%lowpassfcut (optional)
 %
 % Copyright (C) 2014 Alice Mantoan, Monica Reggiani
 % Alice Mantoan, Monica Reggiani
@@ -16,11 +17,21 @@ function []=runSO(osimModel, coordinates_file, external_loads_file, results_dire
 
 import org.opensim.modeling.*
 
-analyzeTool=AnalyzeTool();
+analyzeTool=AnalyzeTool(XMLTemplate);
 
 %Set the model
 analyzeTool.setModel(osimModel);
 analyzeTool.setModelFilename(osimModel.getDocumentFileName());
+
+analyzeTool.setReplaceForceSet(false);
+analyzeTool.setResultsDir(results_directory);
+analyzeTool.setOutputPrecision(8)
+
+if nargin >4  %Set actuators file    
+    forceSet = ArrayStr();
+    forceSet.append(force_set_files);
+    analyzeTool.setForceSetFiles(forceSet);
+end
 
 % Get mot data to determine time range
 motData = Storage(coordinates_file);
@@ -32,55 +43,38 @@ final_time = motData.getLastTime();
 analyzeTool.setInitialTime(initial_time);
 analyzeTool.setFinalTime(final_time);
 
-%analyzeTool.setControlsFileName()
-
-analyzeTool.setResultsDir(results_directory)
-
-analyzeTool.setReplaceForceSet(false)
-
-analyzeTool.setOutputPrecision(8)
 analyzeTool.setSolveForEquilibrium(false)
 analyzeTool.setMaximumNumberOfSteps(20000)
 analyzeTool.setMaxDT(1)
 analyzeTool.setMinDT(1e-008)
 analyzeTool.setErrorTolerance(1e-005)
 
-%Static Optimization
+%% Static Optimization
 
-so= StaticOptimization(osimModel);
-%so= StaticOptimization();
-
-so.setOn(true);
-so.setStartTime(initial_time);
-so.setEndTime(final_time);
-
-so.setStepInterval(1)
-so.setInDegrees(true)
-so.setUseModelForceSet(true)
-so.setActivationExponent(2)
-so.setUseMusclePhysiology(true)
-so.setConvergenceCriterion(0.0001)
-so.setMaxIterations(100)
+%so = createStaticOptimizationObj(initial_time, final_time);
 
 %Append to analyzeTool
-analyzeTool.getAnalysisSet().adoptAndAppend(so)
+%analyzeTool.getAnalysisSet().adoptAndAppend(so);
 
-if nargin >4
-    %Set actuators file
-    forceSet = ArrayStr();
-    forceSet.append(force_set_files);
-    analyzeTool.setForceSetFiles(forceSet)
-end
+%to avoid memory leak with MATLAB, use the Static Optimization object load
+%with the XMLTemplate, and set just initial and final time
+analyzeTool.getAnalysisSet().get(0).setStartTime(initial_time);
+analyzeTool.getAnalysisSet().get(0).setEndTime(final_time);
+
+%%
+%analyzeTool.setControlsFileName()
 
 analyzeTool.setExternalLoadsFileName(external_loads_file);
 analyzeTool.setCoordinatesFileName(coordinates_file);
 
-if nargin >5
-    analyzeTool.setLowpassCutoffFrequency(lowpassfcut);
+if nargin ==7
+     analyzeTool.setLowpassCutoffFrequency(lowpassfcut);
+else
+     analyzeTool.setLowpassCutoffFrequency(-1); %the default value is -1.0, so no filtering
 end
 
 
-% Save the settings in the Setup folder
+%% Save the settings in the Setup folder
 setupFileDir=[results_directory '\Setup'];
 
 if exist(setupFileDir,'dir') ~= 7
@@ -90,12 +84,8 @@ end
 setupFile='setup_SO.xml';
 analyzeTool.print([setupFileDir '\' setupFile ])
 
-%Run SO
-matlabdir=pwd;
-cd(setupFileDir)
-dos(['analyze -S ',setupFile]);
-cd(matlabdir);
-
+%% Run
+runAnalyzeTool(setupFileDir, setupFile);
 
 %Save the log file in a Log folder for each trial
 logFolder=[results_directory '\Log'];
@@ -104,3 +94,6 @@ if exist(logFolder,'dir') ~= 7
 end
 movefile([setupFileDir '\out.log'],[logFolder '\out.log'])
 movefile([setupFileDir '\err.log'],[logFolder '\err.log'])
+
+
+
