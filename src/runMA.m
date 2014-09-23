@@ -1,11 +1,9 @@
-function []=runSO(osimModel, coordinates_file, external_loads_file, results_directory, force_set_files, XMLTemplate, lowpassfcut, varargin)
-% Function to run SO for a single trial
+function []=runMA(osimModel, coordinates_file, results_directory, XMLTemplate, lowpassfcut,varargin)
+% Function to run MA for a single trial
 %input:
 %model_file
 %coordinates_file
-%external_loads_file
 %results_directory
-%force_set_files (optional, but usually used)
 %XMLTemplate (used until problems with API will be solved)
 %lowpassfcut (optional)
 %
@@ -27,11 +25,6 @@ analyzeTool.setReplaceForceSet(false);
 analyzeTool.setResultsDir(results_directory);
 analyzeTool.setOutputPrecision(8)
 
-if nargin >4  %Set actuators file    
-    forceSet = ArrayStr();
-    forceSet.append(force_set_files);
-    analyzeTool.setForceSetFiles(forceSet);
-end
 
 % Get mot data to determine time range
 motData = Storage(coordinates_file);
@@ -49,25 +42,25 @@ analyzeTool.setMaxDT(1)
 analyzeTool.setMinDT(1e-008)
 analyzeTool.setErrorTolerance(1e-005)
 
-%% Static Optimization
+%% Muscle Analysis
 
-%so = createStaticOptimizationObj(initial_time, final_time);
+%ma = createMuscleAnalysisObj(initial_time, final_time);
 
 %Append to analyzeTool
-%analyzeTool.getAnalysisSet().adoptAndAppend(so);
+%analyzeTool.getAnalysisSet().adoptAndAppend(ma);
 
-%to avoid memory leak with MATLAB, use the Static Optimization object load
-%with the XMLTemplate, and set just initial and final time
+%since setComputeMoments(true) from API does not work, it is necessary to 
+%load the XMLTemplate, and set just initial and final time
+
 analyzeTool.getAnalysisSet().get(0).setStartTime(initial_time);
 analyzeTool.getAnalysisSet().get(0).setEndTime(final_time);
 
-%%
-%analyzeTool.setControlsFileName()
 
-analyzeTool.setExternalLoadsFileName(external_loads_file);
+%%
+
 analyzeTool.setCoordinatesFileName(coordinates_file);
 
-if nargin ==7
+if nargin ==5
      analyzeTool.setLowpassCutoffFrequency(lowpassfcut);
 else
      analyzeTool.setLowpassCutoffFrequency(-1); %the default value is -1.0, so no filtering
@@ -81,7 +74,7 @@ if exist(setupFileDir,'dir') ~= 7
     mkdir (setupFileDir);
 end
 
-setupFile='setup_SO.xml';
+setupFile='setup_MA.xml';
 analyzeTool.print([setupFileDir '\' setupFile ]);
 
 %% Run
@@ -94,6 +87,3 @@ if exist(logFolder,'dir') ~= 7
 end
 movefile([setupFileDir '\out.log'],[logFolder '\out.log'])
 movefile([setupFileDir '\err.log'],[logFolder '\err.log'])
-
-
-

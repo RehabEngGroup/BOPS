@@ -1,6 +1,13 @@
 function soObj = createStaticOptimizationObj (initial_time, final_time)
+% Function to initialize a Static Optimization object for the Analyze Tool
+%
+% Copyright (C) 2014 Alice Mantoan, Monica Reggiani
+% Alice Mantoan, Monica Reggiani
+% <ali.mantoan@gmail.com>, <monica.reggiani@gmail.com>
 
-%soObj= StaticOptimization(osimModel);
+%%
+import org.opensim.modeling.*
+
 soObj= StaticOptimization();
 
 soObj.setOn(true);

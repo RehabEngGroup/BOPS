@@ -24,6 +24,11 @@ switch tag
         
         outputDir=[inputDir(1:ind) 'staticOptimization\' elaborationID '\'];
         
+    case 'MA'
+        
+        outputDir=[inputDir(1:ind) 'muscleAnalysis\' elaborationID '\'];
+        
+        
     otherwise
         error ([tag ' case missing. Check function outputFoldersDefinition.m'])
 end
