@@ -30,10 +30,10 @@ inputTrials=trialsList; %list of input trials includes all trials
 [anglesToPlot,IKxlabel]=settingIKplot(model_file);
 
 %Plot results for each trial
-plotProcessingResults(IKtrialsOutputDir,'ik.mot',anglesToPlot,IKxlabel)
+plotProcessingResults(IKtrialsOutputDir,'ik.mot',IKxlabel, anglesToPlot)
 
 %Plot results of all input trials together
-plotResultsMultipleTrials(IKoutputDir,inputTrials, 'ik.mot', anglesToPlot,IKxlabel)
+plotResultsMultipleTrials(IKoutputDir,inputTrials, 'ik.mot',IKxlabel, anglesToPlot)
 
 %% INVERSE DYNAMICS
 
@@ -54,9 +54,9 @@ plotResultsMultipleTrials(IKoutputDir,inputTrials, 'ik.mot', anglesToPlot,IKxlab
 [momentsToPlot,IDxlabel]=settingIDplot(model_file,anglesToPlot);
 
 %Plot results for each trial
-plotProcessingResults(IDtrialsOutputDir,'inverse_dynamics.sto',momentsToPlot,IDxlabel)
+plotProcessingResults(IDtrialsOutputDir,'inverse_dynamics.sto',IDxlabel, momentsToPlot)
 %Plot results of all input trials together
-plotResultsMultipleTrials(IDoutputDir,inputTrials, 'inverse_dynamics.sto', momentsToPlot,IDxlabel)
+plotResultsMultipleTrials(IDoutputDir,inputTrials, 'inverse_dynamics.sto',IDxlabel, momentsToPlot)
 
 
 %% STATIC OPTIMIZATION

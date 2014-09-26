@@ -1,4 +1,4 @@
-function []=plotProcessingResults(filesPath,filename,Yquantities,Xlabel)
+function []=plotProcessingResults(filesPath,filename,xaxislabel, Yquantities, varargin)
 % Function to plot IK results
 %
 % Copyright (C) 2014 Alice Mantoan, Monica Reggiani
@@ -9,32 +9,43 @@ function []=plotProcessingResults(filesPath,filename,Yquantities,Xlabel)
 
 for k=1:length(filesPath)
     
-    
-    figurePath=[filesPath{k} filesep 'Figures' filesep];
+    if strcmp(filename,'Torques.sto')
+        figurePath=[filesPath{k} filesep 'Figures' filesep 'Torques' filesep];
+    else        
+        figurePath=[filesPath{k} filesep 'Figures' filesep];
+    end
     
     if exist(figurePath,'dir') ~= 7
         mkdir(figurePath);
     end
     
-    plotLabels=regexprep(Yquantities, '_', ' ');
     
     file=importdata([filesPath{k} filesep filename]);
     
-    coord_idx=findIndexes(file.colheaders,Yquantities);
+    if nargin>3
+        
+        coord_idx=findIndexes(file.colheaders,Yquantities);
+    else
+        Yquantities=file.colheaders(2:end); %take all columns except time
+        coord_idx=[2:size(file.colheaders,2)];
+    end
+        
+     plotLabels=regexprep(Yquantities, '_', ' ');
     
     results=file.data;
     
-    switch Xlabel
-        case 'time'
+    switch xaxislabel
+        
+        case {'time'}
             
             timeVector = results(:,1);
             
-        case {'% stance','% gait cycle', '% time', '% Analysis Window'}
+        case {'% Stance','% Gait Cycle', '% time', '% Analysis Window'}
             
             timeVector=[1:size(results(:,1),1)]/size(results(:,1),1)*100;
             
         otherwise
-            error(['Case for the x_axis: ' Xlabel ' not defined!Add it in plotIKresult.m']);
+            error(['Case for the x_axis: ' xaxislabel ' not defined!Add it in plotIKresult.m']);
             
     end
     
@@ -51,7 +62,7 @@ for k=1:length(filesPath)
         title(filename)
         hold off
         
-        xlabel(Xlabel)
+        xlabel(xaxislabel)
         ylabel(plotLabels(j))
         
         saveas(h,[figurePath file.colheaders{coordCol} '.fig'])

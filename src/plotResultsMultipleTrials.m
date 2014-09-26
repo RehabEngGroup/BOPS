@@ -1,4 +1,4 @@
-function []=plotResultsMultipleTrials(resultsPath, trialsList, filename, Yquantities,x)
+function []=plotResultsMultipleTrials(resultsPath, trialsList, filename,x, Yquantities, varargin)
 % Function to plot results from multiple trials
 %
 % Copyright (C) 2014 Alice Mantoan, Monica Reggiani
@@ -10,8 +10,16 @@ function []=plotResultsMultipleTrials(resultsPath, trialsList, filename, Yquanti
 %Load data
 for k=1:length(trialsList)
        
-    file=importdata([resultsPath trialsList{k} filesep filename]);
-    coord_idx=findIndexes(file.colheaders,Yquantities);    
+    file=importdata([resultsPath filesep trialsList{k} filesep filename]);
+    
+    if nargin>4
+        
+        coord_idx=findIndexes(file.colheaders,Yquantities);
+    else
+        Yquantities=file.colheaders(2:end); %take all columns except time
+        coord_idx=[2:size(file.colheaders,2)];
+    end
+     
     
     results=file.data;
         
@@ -29,7 +37,7 @@ for k=1:length(trialsList)
             
             timeVector{k} = results(:,1);
             
-        case {'% stance','% gait cycle', '% time', '% Analysis Window'}
+        case {'% Stance','% Gait Cycle', '% time', '% Analysis Window'}
             
             timeVector{k}=[1:size(results(:,1),1)]/size(results(:,1),1)*100;
             
@@ -40,8 +48,11 @@ for k=1:length(trialsList)
     
 end
 
-
-figurePath=[resultsPath 'Figures\'];
+if strcmp(filename,'Torques.sto')
+    figurePath=[resultsPath filesep 'Figures' filesep 'Torques' filesep];
+else
+    figurePath=[resultsPath filesep 'Figures' filesep];
+end
 
 if exist(figurePath,'dir') ~= 7
     mkdir(figurePath);
