@@ -31,20 +31,7 @@ for k=1:length(trialsList)
         
     end
         
-    
-    switch x
-        case 'time'
-            
-            timeVector{k} = results(:,1);
-            
-        case {'% Stance','% Gait Cycle', '% time', '% Analysis Window'}
-            
-            timeVector{k}=[1:size(results(:,1),1)]/size(results(:,1),1)*100;
-            
-        otherwise
-            error(['Case for the x_axis: ' x ' not defined!Add it in plotIKresult.m']);
-            
-    end
+    timeVector{k}=getXaxis(x, results);
     
 end
 
@@ -63,12 +50,12 @@ save([figurePath, 'plottedData'], 'y')
 
 plotLabels=regexprep(Yquantities, '_', ' ');
 legendLabels=regexprep(trialsList, '_', ' ');
-cmap = colormap(hsv);
+cmap = colormap(hsv(128));
 %plotTitle = filename;
 
 for k=1:size(y,1)
     
-    plotColor = cmap(round(1+6.5*(k-1)),:);
+    plotColor = cmap(round(1+5.5*(k-1)),:);
     
     for j=1:size(y,2)
         

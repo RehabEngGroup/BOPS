@@ -34,20 +34,8 @@ for k=1:length(filesPath)
     
     results=file.data;
     
-    switch xaxislabel
-        
-        case {'time'}
-            
-            timeVector = results(:,1);
-            
-        case {'% Stance','% Gait Cycle', '% time', '% Analysis Window'}
-            
-            timeVector=[1:size(results(:,1),1)]/size(results(:,1),1)*100;
-            
-        otherwise
-            error(['Case for the x_axis: ' xaxislabel ' not defined!Add it in plotIKresult.m']);
-            
-    end
+    timeVector=getXaxis(xaxislabel, results);
+    
     
     for j =1: length(coord_idx)
         

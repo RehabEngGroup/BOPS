@@ -23,19 +23,7 @@ for k=1:nTrials
         
         results=file.data;
         
-        switch xaxislabel
-            case 'time'
-                
-                timeVector = results(:,1);
-                
-            case {'% Stance','% Gait Cycle', '% time', '% Analysis Window'}
-                
-                timeVector=[1:size(results(:,1),1)]/size(results(:,1),1)*100;
-                
-            otherwise
-                error(['Case for the x_axis: ' xaxislabel ' not defined!Add it in plotIKresult.m']);
-                
-        end
+        timeVector=getXaxis(xaxislabel, results);
         
         nMuscleGroups=size(musclesGroups,2);
         
@@ -83,7 +71,8 @@ for k=1:nTrials
                 
             end
             
-            saveas(h,[figurePath musclesGroups{m}.name '.fig'])    
+            saveas(h,[figurePath musclesGroups{m}.name '.fig'])  
+   %       saveas(h,[figurePath musclesGroups{m}.name '.png'])    
             close(h)
         end
     end
