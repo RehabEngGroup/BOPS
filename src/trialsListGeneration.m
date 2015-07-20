@@ -12,7 +12,7 @@ j=1;
 
 for k=3:length(trials)
 
-    if trials(k).isdir==1
+    if (trials(k).isdir==1 && strcmp(trials(k).name,'Figures')==0 && strcmp(trials(k).name,'maxemg')==0)
         trialsList{j}=trials(k).name;
         j=j+1;
     end
