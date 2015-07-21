@@ -1,4 +1,4 @@
-function [dofsToPlot,xlabel]=settingIKplot(model_file, varargin)
+function [dofsToPlot,xaxislabel]=settingIKplot(model_file, varargin)
 % Function to set plot of results from IK
 %
 % Copyright (C) 2014 Alice Mantoan, Monica Reggiani
@@ -40,20 +40,20 @@ end
 %2- Set x-axis
 
 %default value
-xlabel='% Analysis Window';
+%xaxislabel='% Analysis Window';
 
 %Possible choices
 %Uncomment this part if you want to ask to the user 
-% x_labels={
-%     '% Analysis Window';
-%     '% stance';
-%     '% gait cycle';
-%     '% time';
-%     'time [s]';
-%     };
-% 
-% [xlabelIndex,v] = listdlg('PromptString','Select x-axis for plots:',...
-%     'SelectionMode','single',...
-%     'ListString',x_labels);
-% 
-% xlabel=x_labels{xlabelIndex};
+x_labels={
+    '% Analysis Window';
+    '% Stance';
+    '% Gait Cycle';
+    '% time';
+    'time [s]';
+    };
+
+[xlabelIndex,v] = listdlg('PromptString','Select x-axis for plots:',...
+    'SelectionMode','single',...
+    'ListString',x_labels);
+
+xaxislabel=x_labels{xlabelIndex};
