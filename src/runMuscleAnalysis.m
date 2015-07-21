@@ -33,7 +33,7 @@ for k=1:nTrials
     
     coordinates_file=IKmotFullFileName{k};
 
-    
+    %save_to_base(1)
     switch nargin 
            
         case 6  %until there will be probl setting the Muscle Analysis object with API
@@ -44,7 +44,7 @@ for k=1:nTrials
             
         %very rare          
         case 7
-            runSO(osimModel, coordinates_file, results_directory, XMLTemplate, fcut_coordinates)
+            runMA(osimModel, coordinates_file, results_directory, MATemplateXml, fcut_coordinates)
     end
     
     clear  osimModel coordinates_file results_directory

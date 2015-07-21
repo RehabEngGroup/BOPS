@@ -38,9 +38,11 @@ analyzeTool.setFinalTime(final_time);
 
 analyzeTool.setSolveForEquilibrium(false)
 analyzeTool.setMaximumNumberOfSteps(20000)
+%analyzeTool.setMaxDT(1e-005)
 analyzeTool.setMaxDT(1)
 analyzeTool.setMinDT(1e-008)
 analyzeTool.setErrorTolerance(1e-005)
+
 
 %% Muscle Analysis
 

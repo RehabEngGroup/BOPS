@@ -74,4 +74,5 @@ plotResultsMultipleTrials(IDoutputDir,inputTrials, 'inverse_dynamics.sto', momen
 
 [MAoutputDir, MAtrialsOutputDir]=runMuscleAnalysis(inputDir,inputTrials, model_file, IKmotDir, MAid, MATemplateXml); 
 
+[MAoutputDir, MAtrialsOutputDir]=runMuscleAnalysis(inputDir,inputTrials, model_file, IKmotDir, MAid, MATemplateXml, 6);
 

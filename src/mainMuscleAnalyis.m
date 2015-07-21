@@ -16,4 +16,6 @@ trialsList = trialsListGeneration(inputDir);
 inputTrials=trialsList; %list of input trials includes all trials
 
 
-[MAoutputDir, MAtrialsOutputDir]=runMuscleAnalysis(inputDir,inputTrials, model_file, IKresultsDir, MAid, MATemplateXml); 
+%[MAoutputDir, MAtrialsOutputDir]=runMuscleAnalysis(inputDir,inputTrials, model_file, IKresultsDir, MAid, MATemplateXml); 
+
+[MAoutputDir, MAtrialsOutputDir]=runMuscleAnalysis(inputDir,inputTrials, model_file, IKresultsDir, MAid, MATemplateXml, 6);
