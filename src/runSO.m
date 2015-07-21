@@ -68,9 +68,10 @@ analyzeTool.setExternalLoadsFileName(external_loads_file);
 analyzeTool.setCoordinatesFileName(coordinates_file);
 
 if nargin ==7
-     analyzeTool.setLowpassCutoffFrequency(lowpassfcut);
-else
-     analyzeTool.setLowpassCutoffFrequency(-1); %the default value is -1.0, so no filtering
+    analyzeTool.setLowpassCutoffFrequency(lowpassfcut);
+else if nargin<6 %else set the value in the XMLTemplate
+        analyzeTool.setLowpassCutoffFrequency(-1); %the default value is -1.0, so no filtering
+    end
 end
 
 

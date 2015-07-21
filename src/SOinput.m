@@ -70,7 +70,7 @@ if nargout>2
                 inputTrials=dirList;
             end
             
-            if nargout == 6   %vary rare: it can be found in the XML Template or usually already filtered in IK and ID
+            if nargout == 7   %vary rare: it can be found in the XML Template or usually already filtered in IK and ID
                 
                 %1-definition of lowpass frequency cut off for filtering coordinates
                 num_lines = 1;
