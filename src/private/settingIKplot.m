@@ -20,20 +20,21 @@ if nargin==1
     
     dofsToPlot=dofs(selectedDofsIndex)';
     
-else
-    %WARNING: BE SURE to change this HARD-CODED values
-    
-    %remember to change the side
-    side='l';
-    
-    dofsToPlot={
-        strcat('hip_flexion_',side);
-        strcat('hip_adduction_',side);
-        strcat('hip_rotation_',side);
-        strcat('knee_angle_',side);
-        strcat('ankle_angle_',side);
-        strcat('subtalar_angle_',side);
-        };
+%remove hard coded settings
+% else  
+%     %WARNING: BE SURE to change this HARD-CODED values
+%     
+%     %remember to change the side
+%     side='l';
+%     
+%     dofsToPlot={
+%         strcat('hip_flexion_',side);
+%         strcat('hip_adduction_',side);
+%         strcat('hip_rotation_',side);
+%         strcat('knee_angle_',side);
+%         strcat('ankle_angle_',side);
+%         strcat('subtalar_angle_',side);
+%         };
 end
 
 

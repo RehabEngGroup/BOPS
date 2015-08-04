@@ -12,21 +12,21 @@ import org.opensim.modeling.*
 %Definition of Dof for plotting
 switch nargin
               
-    case 0  %HARD CODED SETTINGS
+%    case 0  %HARD CODED SETTINGS
         
         %WARNING: BE SURE to change this HARD-CODED values
         
         %REMEMBER to change the side
-        side='r';
-        
-        momentsToPlot={
-            strcat('hip_flexion_',side, '_moment');
-            strcat('hip_adduction_',side, '_moment');
-            strcat('hip_rotation_',side, '_moment');
-            strcat('knee_angle_',side, '_moment');
-            strcat('ankle_angle_',side, '_moment');
-            strcat('subtalar_angle_',side, '_moment');
-            };
+%         side='r';
+%         
+%         momentsToPlot={
+%             strcat('hip_flexion_',side, '_moment');
+%             strcat('hip_adduction_',side, '_moment');
+%             strcat('hip_rotation_',side, '_moment');
+%             strcat('knee_angle_',side, '_moment');
+%             strcat('ankle_angle_',side, '_moment');
+%             strcat('subtalar_angle_',side, '_moment');
+%             };
      
     case 1
         
@@ -65,16 +65,18 @@ end
 
 %Possible choices
 %Uncomment this part if you want to ask to the user 
-x_labels={
-    '% Analysis Window';
-    '% Stance';
-    '% Gait Cycle';
-    '% time';
-    'time [s]';
-    };
-
-[xlabelIndex,v] = listdlg('PromptString','Select x-axis for plots:',...
-    'SelectionMode','single',...
-    'ListString',x_labels);
-
-xlabel=x_labels{xlabelIndex};
+if nargout > 1
+    x_labels={
+        '% Analysis Window';
+        '% Stance';
+        '% Gait Cycle';
+        '% time';
+        'time [s]';
+        };
+    
+    [xlabelIndex,v] = listdlg('PromptString','Select x-axis for plots:',...
+        'SelectionMode','single',...
+        'ListString',x_labels);
+    
+    xlabel=x_labels{xlabelIndex};
+end

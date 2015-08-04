@@ -37,28 +37,29 @@ plotSetupFile = [pathname filename];
 [musclesGroups]=muscleGroupsFromXMLSetup(plotSetupFile);
 
 
-%Set x-axis
-
-%default value
-xlabel='% Analysis Window';
-
-%Possible choices
-%Uncomment this part if you want to ask to the user 
-x_labels={
-    '% Analysis Window';
-    '% Stance';
-    '% Gait Cycle';
-    '% time';
-    'time [s]';
-    };
-
-[xlabelIndex,v] = listdlg('PromptString','Select x-axis for plots:',...
-    'SelectionMode','single',...
-    'ListString',x_labels);
-
-xlabel=x_labels{xlabelIndex};
-
-
+if nargout >3
+    %Set x-axis
+    
+    %default value
+    xlabel='% Analysis Window';
+    
+    %Possible choices
+    %Uncomment this part if you want to ask to the user
+    x_labels={
+        '% Analysis Window';
+        '% Stance';
+        '% Gait Cycle';
+        '% time';
+        'time [s]';
+        };
+    
+    [xlabelIndex,v] = listdlg('PromptString','Select x-axis for plots:',...
+        'SelectionMode','single',...
+        'ListString',x_labels);
+    
+    xlabel=x_labels{xlabelIndex};
+    
+end
 %Set Y-axis unit
 % 
 % switch stoFilesID
