@@ -1,4 +1,4 @@
-function [MAid, XMLsetupTemplate, IKresultsDir, inputTrials, fcut_coordinates, varargout] = MAinput()
+function [MAid, XMLsetupTemplate, fcut_coordinates, inputTrials, IKresultsDir, varargout] = MAinput(trialsList, varargin)
 % Function asking input for MA 
 %
 % Copyright (C) 2014 Alice Mantoan, Monica Reggiani
@@ -21,55 +21,34 @@ cd(originalPath)
 
 XMLsetupTemplate = [pathname filename];
 
-%OPTIONAL:
+%Definition of lowpass frequency cut off for filtering coordinates
+num_lines = 1;
+options.Resize='on';
+options.WindowStyle='modal';
+defValue{1}='6';
 
-if nargout>2
+dlg_title='Choose the low-pass cut-off frequency for filtering the coordinates_file data ';
+prompt ='lowpass_cutoff_frequency_for_coordinates (-1 disable filtering)';
+
+answer = inputdlg(prompt,dlg_title,num_lines,defValue,options);
+
+fcut_coordinates=str2num(answer{1});
+
+
+%OPTIONAL:
+if nargout>3
     
-    %Get folder with Inverse Kinematics results
-    IKresultsDir = uigetdir(' ', 'Select folder with INVERSE KINEMATICS results to use');
+    %Selection of trials to elaborate from the list   
+    [trialsIndex,v] = listdlg('PromptString','Select trials to elaborate:',...
+        'SelectionMode','multiple',...
+        'ListString',trialsList);
     
-    %2-selection of trials to be processed
-    [dirList] = trialsListGeneration(IKresultsDir);
+    inputTrials=trialsList(trialsIndex);
     
-    %Removing folder called 'Figures' from the list
-    findInd= strfind(dirList, 'Figures');
-    j=1;
-    for k=1:length(dirList)
-        
-        if  isempty(findInd{k})
-            IKmotList{j}=dirList{k};
-            j=j+1;
-        end
+    %Get folder with Inverse Kinematics results to use for MA
+    if nargout == 5           
+        IKresultsDir = uigetdir(' ', 'Select folder with INVERSE KINEMATICS results to use');
     end
-    
-    if nargout>3
-        
-        %%Selection of trials to elaborate from the list
-        
-        [trialsIndex,v] = listdlg('PromptString','Select trials to elaborate:',...
-            'SelectionMode','multiple',...
-            'ListString',IKmotList);
-        
-        inputTrials=IKmotList(trialsIndex);
-    else
-        inputTrials=dirList;
-    end
-    
-    if nargout == 5   %vary rare: it can be found in the XML Template or usually already filtered in IK and ID
-        
-        %1-definition of lowpass frequency cut off for filtering coordinates
-        num_lines = 1;
-        options.Resize='on';
-        options.WindowStyle='modal';
-        defValue{1}='6';
-        
-        dlg_title='Choose the low-pass cut-off frequency for filtering the coordinates_file data ';
-        prompt ='lowpass_cutoff_frequency_for_coordinates (-1 disable filtering)';
-        
-        
-        answer = inputdlg(prompt,dlg_title,num_lines,defValue,options);
-        
-        fcut_coordinates=str2num(answer{1});
-        
-    end
-end
+ 
+end   
+

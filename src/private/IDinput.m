@@ -1,6 +1,6 @@
 %function [IDid, IDTemplateXml, inputTrials, varargout] = IDinput(trialsList, varargin)
-function [IDid, IDTemplateXml, IKresultsDir, fcut_coordinates, inputTrials, varargout] = IDinput()
-% Function asking input for IK 
+function [IDid, IDTemplateXml, fcut_coordinates, inputTrials, IKresultsDir, varargout] = IDinput(trialsList, varargin)
+% Function asking input for ID 
 %
 % Copyright (C) 2014 Alice Mantoan, Monica Reggiani
 % Alice Mantoan, Monica Reggiani
@@ -21,52 +21,37 @@ cd(originalPath)
 
 IDTemplateXml = [pathname filename]; 
 
-%Get folder with Inverse Kinematics results to use for ID
-IKresultsDir = uigetdir(' ', 'Select folder with INVERSE KINEMATICS results to use');
+%Definition of lowpass frequency cut off for filtering coordinates
+num_lines = 1;
+options.Resize='on';
+options.WindowStyle='modal';
+defValue{1}='6';
+
+dlg_title='Choose the low-pass cut-off frequency for filtering the coordinates_file data ';
+prompt ='lowpass_cutoff_frequency_for_coordinates (-1 disable filtering)';
+
+answer = inputdlg(prompt,dlg_title,num_lines,defValue,options);
+
+fcut_coordinates=str2num(answer{1});
 
 %OPTIONAL:
 
 if nargout>3
     
-    %1-definition of lowpass frequency cut off for filtering coordinates
-    num_lines = 1;
-    options.Resize='on';
-    options.WindowStyle='modal';
-    defValue{1}='6';
-    
-    dlg_title='Choose the low-pass cut-off frequency for filtering the coordinates_file data ';
-    prompt ='lowpass_cutoff_frequency_for_coordinates (-1 disable filtering)';
-    
-    
-    answer = inputdlg(prompt,dlg_title,num_lines,defValue,options);
-    
-    fcut_coordinates=str2num(answer{1});
-    
-    
-    %2-selection of trials to be processed
-    [dirList] = trialsListGeneration(IKresultsDir);
-    
-    %Removing folder called 'Figures' from the list
-    findInd= strfind(dirList, 'Figures');
-    j=1;
-    for k=1:length(dirList)
-        
-        if  isempty(findInd{k})
-            IKmotList{j}=dirList{k};
-            j=j+1;
-        end
-    end
-    
-    if nargout == 5
-        
-        %%Selection of trials to elaborate from the list
-        
+    if nargin
         [trialsIndex,v] = listdlg('PromptString','Select trials to elaborate:',...
             'SelectionMode','multiple',...
-            'ListString',IKmotList);
+            'ListString',trialsList);
         
-        inputTrials=IKmotList(trialsIndex);
+        inputTrials=trialsList(trialsIndex);
     else
-        inputTrials=dirList;
+        error('ErrorTests:convertTest', ...
+            ['----------------------------------------------------------------\nWARNING: Wrong call of IDinput(): list of trials required as input. \nOtherwise, please limit the output to three \n----------------------------------------------------------------'])
     end
+    
+     if nargout == 5   %Get folder with Inverse Kinematics results to use for ID
+         
+         IKresultsDir = uigetdir(' ', 'Select folder with INVERSE KINEMATICS results to use');
+     end
 end
+
