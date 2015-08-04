@@ -4,75 +4,89 @@
 % Alice Mantoan, Monica Reggiani
 % <ali.mantoan@gmail.com>, <monica.reggiani@gmail.com>
 
-%%
 
-[inputDir, model_file]=processingInput();
+%% Processing Configuration
 
-%Get trials in the input folder
-trialsList = trialsListGeneration(inputDir);
+[inputDir, model_file]=processingConfiguration();
+
 
 %% INVERSE KINEMATICS
 
-[IKid, IKTemplateXml] = IKinput();
-inputTrials=trialsList; %list of input trials includes all trials
+[IKoutputDir, IKtrialsOutputDir, IKprocessedTrials]=InverseKinematics(inputDir, model_file); 
 
-%if you want to process a subset of all trials, call the function as:
-%[IKid, IKTemplateXml,inputTrials] = IKinput(trialsList);
 
-[IKoutputDir, IKtrialsOutputDir]=runInverseKinematics(inputDir,inputTrials, model_file, IKTemplateXml, IKid); 
+%% Plotting IK results
 
-%Plotting
+IKmotFilename='ik.mot'; %our default name
+[coordinates,Xaxislabel]=plotResults('IK', IKoutputDir, IKtrialsOutputDir, model_file, IKprocessedTrials, IKmotFilename);
 
-%WARNING: REMEMBER to modify the following function: it has hard coded setting!!!
-%[anglesToPlot,IKxlabel]=settingIKplot();
-
-%To avoid hard coded settings: selection of anglesToPlot from GUI
-[anglesToPlot,IKxlabel]=settingIKplot(model_file);
-
-%Plot results for each trial
-plotProcessingResults(IKtrialsOutputDir,'ik.mot',IKxlabel, anglesToPlot)
-
-%Plot results of all input trials together
-plotResultsMultipleTrials(IKoutputDir,inputTrials, 'ik.mot',IKxlabel, anglesToPlot)
 
 %% INVERSE DYNAMICS
 
-% ID input setting
-%[IDid, IDTemplateXml, IKmotDir] = IDinput();
-%ask also the frequency cut off for filtering
-[IDid, IDTemplateXml, IKmotDir, fcut_coordinates] = IDinput();
+%when run IK before & want to process the same trials
+%[IDoutputDir, IDtrialsOutputDir, processedTrials]=InverseDynamics(inputDir, model_file, IKoutputDir, IKprocessedTrials); 
 
-%inputTrials assumed to be the same of IK (you need to have done IK before performing ID)
+%when run IK before, but ID on different trials
+[IDoutputDir, IDtrialsOutputDir, IDprocessedTrials]=InverseDynamics(inputDir, model_file, IKoutputDir); 
 
-%[IDoutputDir, IDtrialsOutputDir]=runInverseDynamics(inputDir,IKmotDir, inputTrials, model_file, IDTemplateXml, IDid); 
-[IDoutputDir, IDtrialsOutputDir]=runInverseDynamics(inputDir,IKmotDir, inputTrials, model_file, IDTemplateXml, IDid, fcut_coordinates); 
-
-
-% Plotting
-
-%3- OR use already selected anglesToPlot
-[momentsToPlot,IDxlabel]=settingIDplot(model_file,anglesToPlot);
-
-%Plot results for each trial
-plotProcessingResults(IDtrialsOutputDir,'inverse_dynamics.sto',IDxlabel, momentsToPlot)
-%Plot results of all input trials together
-plotResultsMultipleTrials(IDoutputDir,inputTrials, 'inverse_dynamics.sto',IDxlabel, momentsToPlot)
+%if no IK before:
+%[IDoutputDir, IDtrialsOutputDir, processedTrials]=InverseDynamics(inputDir, model_file);
 
 
-%% STATIC OPTIMIZATION
 
+%% Plotting ID results
 
-[SOid, XMLsetupTemplate, SOActuators] = SOinput();
+IDfilename='inverse_dynamics.sto';
 
-
-[SOoutputDir, SOtrialsOutputDir]=runStaticOptimization(inputDir,inputTrials, model_file, IKmotDir, IDoutputDir, SOid, SOActuators, XMLsetupTemplate); 
+if exist('coordinates','var') && exist('Xaxislabel','var')  %same X-axis label
+    plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates, Xaxislabel)
+else if exist('coordinates','var')       %same coordinates, different X axis
+        plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates) %add "_moment" to coordinates
+    else %if no IK before
+        plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename)
+    end
+end
 
 
 %% Muscle Analysis
 
-[MAid, MATemplateXml] = MAinput();
+%when run IK before & want to process the same trials
+[MAoutputDir,MAtrialsOutputDir, MAprocessedTrials]=MuscleAnalysis(inputDir, model_file, IKoutputDir, IKprocessedTrials); 
 
-[MAoutputDir, MAtrialsOutputDir]=runMuscleAnalysis(inputDir,inputTrials, model_file, IKmotDir, MAid, MATemplateXml); 
+%when run IK before, but MA on different trials
+%[MAoutputDir, MAtrialsOutputDir, MAprocessedTrials]=MuscleAnalysis(inputDir, model_file, IKoutputDir); 
 
-[MAoutputDir, MAtrialsOutputDir]=runMuscleAnalysis(inputDir,inputTrials, model_file, IKmotDir, MAid, MATemplateXml, 6);
+%if no IK before:
+%[MAoutputDir, MAtrialsOutputDir, MAprocessedTrials]=MuscleAnalysis(inputDir, model_file);
+
+
+%% Plot Storage (MA)
+if exist('Xaxislabel','var')
+    plotStorage(Xaxislabel)
+else
+    plotStorage()
+end
+
+
+%% STATIC OPTIMIZATION
+
+%when run IK and ID before & want to process the same trials (of ID)
+[SOoutputDir,SOtrialsOutputDir, SOprocessedTrials]=StaticOptimization(inputDir, model_file, IKoutputDir, IDoutputDir, IDprocessedTrials); 
+
+%when run IK and ID before, but SO on different trials
+%[SOoutputDir,SOtrialsOutputDir, SOprocessedTrials]=StaticOptimization(inputDir, model_file, IKoutputDir, IDoutputDir); 
+
+%if no IK and ID before:
+%[SOoutputDir,SOtrialsOutputDir, SOprocessedTrials]=StaticOptimization(inputDir, model_file); 
+
+
+%% Plot Storage (SO)
+
+if exist('Xaxislabel','var')
+    plotStorage(Xaxislabel)
+else
+    plotStorage()
+end
+
+
 
