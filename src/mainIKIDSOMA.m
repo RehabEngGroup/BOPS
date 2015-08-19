@@ -24,13 +24,13 @@ IKmotFilename='ik.mot'; %our default name
 %% INVERSE DYNAMICS
 
 %when run IK before & want to process the same trials
-%[IDoutputDir, IDtrialsOutputDir, processedTrials]=InverseDynamics(inputDir, model_file, IKoutputDir, IKprocessedTrials); 
+%[IDoutputDir, IDtrialsOutputDir, IDprocessedTrials]=InverseDynamics(inputDir, model_file, IKoutputDir, IKprocessedTrials); 
 
 %when run IK before, but ID on different trials
 [IDoutputDir, IDtrialsOutputDir, IDprocessedTrials]=InverseDynamics(inputDir, model_file, IKoutputDir); 
 
 %if no IK before:
-%[IDoutputDir, IDtrialsOutputDir, processedTrials]=InverseDynamics(inputDir, model_file);
+%[IDoutputDir, IDtrialsOutputDir, IDprocessedTrials]=InverseDynamics(inputDir, model_file);
 
 
 
@@ -39,11 +39,11 @@ IKmotFilename='ik.mot'; %our default name
 IDfilename='inverse_dynamics.sto';
 
 if exist('coordinates','var') && exist('Xaxislabel','var')  %same X-axis label
-    plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates, Xaxislabel)
+    plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates, Xaxislabel);
 else if exist('coordinates','var')       %same coordinates, different X axis
-        plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates) %add "_moment" to coordinates
+        plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates); %add "_moment" to coordinates
     else %if no IK before
-        plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename)
+        plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename);
     end
 end
 
