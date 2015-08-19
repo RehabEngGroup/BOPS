@@ -1,4 +1,11 @@
 function []=plotSTOgroups(filesPath,filesname,stoFilesType, musclesGroups,xaxislabel)
+%
+% Copyright (C) 2014 Alice Mantoan, Monica Reggiani
+% Alice Mantoan, Monica Reggiani
+% <ali.mantoan@gmail.com>, <monica.reggiani@gmail.com>
+
+%%
+close all
 
 nTrials=size(filesPath,2);
 nSTOfiles=size(filesname,2);

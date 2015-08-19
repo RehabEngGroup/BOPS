@@ -6,6 +6,7 @@ function []=plotProcessingResults(filesPath,filename,xaxislabel, Yquantities, va
 % <ali.mantoan@gmail.com>, <monica.reggiani@gmail.com>
 
 %%
+close all
 
 for k=1:length(filesPath)
     
@@ -21,6 +22,7 @@ for k=1:length(filesPath)
     
     
     file=importdata([filesPath{k} filesep filename]);
+    filenameTitle=regexprep(filename, '_', ' ');
     
     if nargin>3
         
@@ -47,7 +49,7 @@ for k=1:length(filesPath)
         hold on
         
         plot(timeVector, y);
-        title(filename)
+        title(filenameTitle)
         hold off
         
         xlabel(xaxislabel)

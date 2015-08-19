@@ -6,7 +6,7 @@ function []=plotResultsMultipleTrials(resultsPath, trialsList, filename,x, Yquan
 % <ali.mantoan@gmail.com>, <monica.reggiani@gmail.com>
 
 %%
-
+close all
 %Load data
 for k=1:length(trialsList)
        
