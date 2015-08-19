@@ -11,9 +11,14 @@ import org.opensim.modeling.*;
 coordinateSet = osimJoint.getCoordinateSet();
 nCoordinates = coordinateSet.getSize();
 
-for i = 0:nCoordinates-1
-    singleJointDofs(i+1) = coordinateSet.get(i).getName();
-
+if nCoordinates>0
+    
+    for i = 0:nCoordinates-1
+        singleJointDofs(i+1) = coordinateSet.get(i).getName();
+        
+    end
+else
+    singleJointDofs=[];
 end
 
 
