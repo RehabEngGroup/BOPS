@@ -15,7 +15,6 @@ import org.opensim.modeling.*
 [IKmotFullFileName] = inputFilesListGeneration(IKmotDir, inputTrials, '.mot');
 
 
-
 %%
 nTrials= length(inputTrials);
 
@@ -33,7 +32,6 @@ for k=1:nTrials
     
     coordinates_file=IKmotFullFileName{k};
 
-    %save_to_base(1)
     switch nargin 
            
         case 6  %until there will be probl setting the Muscle Analysis object with API
@@ -41,8 +39,7 @@ for k=1:nTrials
             
         case 5  %it will be the optimal case when API problems will be solved
             runMA(osimModel, coordinates_file, results_directory)            
-            
-        %very rare          
+                     
         case 7
             runMA(osimModel, coordinates_file, results_directory, MATemplateXml, fcut_coordinates)
     end

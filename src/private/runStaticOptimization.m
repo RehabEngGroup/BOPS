@@ -43,7 +43,6 @@ for k=1:nTrials
         case 7  %it will be the optimal case when API problems will be solved
             runSO(osimModel, coordinates_file, external_loads_file, results_directory, force_set_files)            
             
-        %both very rare
         case 6
             runSO(osimModel, coordinates_file, external_loads_file, results_directory) % not using Actuators
             
