@@ -151,22 +151,127 @@ function RunButton_Callback(hObject, eventdata, handles)
 
 global selections inputDir model_file
 
+%% IK
 if selections.runIK == 1
-
     [IKoutputDir, IKtrialsOutputDir, IKprocessedTrials]=InverseKinematics(inputDir, model_file); 
 end
 
-IKmotFilename='ik.mot'; %our default name
-
-set(handles.figure1, 'HandleVisibility', 'off');
+% Plotting IK Results
 if selections.plotIK == 1
+    IKmotFilename='ik.mot'; %our default name
+    set(handles.figure1, 'HandleVisibility', 'off');
     [coordinates,Xaxislabel]=plotResults('IK', IKoutputDir, IKtrialsOutputDir, model_file, IKprocessedTrials, IKmotFilename);
+    set(handles.figure1, 'HandleVisibility', 'on');
 end
-set(handles.figure1, 'HandleVisibility', 'on');
+
+
+%% MA
+
+if selections.runMA==1
+    %when run IK before & want to process the same trials
+    if selections.runIK==1 && selections.selectTrialsMA==0
+        [MAoutputDir,MAtrialsOutputDir, MAprocessedTrials]=MuscleAnalysis(inputDir, model_file, IKoutputDir, IKprocessedTrials);
+    end
+    
+    %when run IK before, but MA on different trials
+    if  selections.runIK==1 && selections.selectTrialsMA==1
+        [MAoutputDir, MAtrialsOutputDir, MAprocessedTrials]=MuscleAnalysis(inputDir, model_file, IKoutputDir);
+    end
+    
+    %if no IK before:
+    if  selections.runIK==0
+        [MAoutputDir, MAtrialsOutputDir, MAprocessedTrials]=MuscleAnalysis(inputDir, model_file);
+    end
+end
+
+% Plot Storage (MA)
+if selections.plotMA==1
+    set(handles.figure1, 'HandleVisibility', 'off');
+    if exist('Xaxislabel','var') && selections.selectXaxisMA==0
+        plotStorage(Xaxislabel)
+    else
+        plotStorage()
+        
+    end
+    set(handles.figure1, 'HandleVisibility', 'on');
+end
 
 
 
+%% ID
 
+if selections.runID==1
+    
+    %when run IK before & want to process the same trials
+    if selections.runIK==1 && selections.selectTrialsID==0
+        [IDoutputDir, IDtrialsOutputDir, IDprocessedTrials]=InverseDynamics(inputDir, model_file, IKoutputDir, IKprocessedTrials);
+    end
+    
+    %when run IK before, but ID on different trials
+    if selections.runIK==1 && selections.selectTrialsID==1
+        [IDoutputDir, IDtrialsOutputDir, IDprocessedTrials]=InverseDynamics(inputDir, model_file, IKoutputDir);
+    end
+    
+    %if no IK before:
+    if  selections.runIK==0
+        [IDoutputDir, IDtrialsOutputDir, IDprocessedTrials]=InverseDynamics(inputDir, model_file);
+    end
+end
+
+% Plotting ID Results
+if selections.plotID==1
+    IDfilename='inverse_dynamics.sto';
+    set(handles.figure1, 'HandleVisibility', 'off');
+    
+    if selections.runIK==1
+        if exist('coordinates','var') && selections.selectCoordinatesToPlotID==0 && exist('Xaxislabel','var') %same X-axis label
+            plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates, Xaxislabel);
+        else if exist('coordinates','var') && selections.selectCoordinatesToPlotID==0       %same coordinates, different X axis
+                plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates); %add "_moment" to coordinates
+            else if selections.selectCoordinatesToPlotID==1
+                    plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename);
+                end
+            end
+        end
+    else  %if no IK before
+        plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename);
+    end
+    set(handles.figure1, 'HandleVisibility', 'on');
+end
+
+%% SO
+
+if selections.runSO==1
+    
+    %when run IK and ID before & want to process the same trials (of ID)
+    if selections.runIK==1 && selections.runID==1 && selections.selectTrialsSO==0       
+        [SOoutputDir,SOtrialsOutputDir, SOprocessedTrials]=StaticOptimization(inputDir, model_file, IKoutputDir, IDoutputDir, IDprocessedTrials);
+    end
+    
+    %when run IK and ID before, but SO on different trials
+    if selections.runIK==1 && selections.runID==1 && selections.selectTrialsSO==1        
+        [SOoutputDir,SOtrialsOutputDir, SOprocessedTrials]=StaticOptimization(inputDir, model_file, IKoutputDir, IDoutputDir);
+    end
+       
+    %if no IK and ID before:
+    if  selections.runIK==0 && selections.runID==0
+        [SOoutputDir,SOtrialsOutputDir, SOprocessedTrials]=StaticOptimization(inputDir, model_file);
+    end
+end
+
+% Plot Storage (SO)
+if selections.plotSO==1
+    set(handles.figure1, 'HandleVisibility', 'off');
+    
+    if exist('Xaxislabel','var') && selections.selectXaxisSO==0
+        plotStorage(Xaxislabel)
+    else
+        plotStorage()
+    end
+    set(handles.figure1, 'HandleVisibility', 'on');
+end
+
+save_to_base(1)
 
 % --- Executes on button press in ResetButton.
 function ResetButton_Callback(hObject, eventdata, handles)
@@ -196,6 +301,26 @@ set(handles.plotStorageSO, 'Enable', 'off')
 set(handles.selectTrialsSO,'Value',0);
 set(handles.selectXaxisSO,'Value',0);
 
+global selections
+
+selections.runIK=0;
+selections.plotIK=0;
+
+selections.runMA=0;
+selections.plotMA=0;
+selections.selectTrialsMA=0;
+selections.selectXaxisMA=0;
+
+selections.runID=0;
+selections.plotID=0;
+selections.selectTrialsID=0;
+selections.selectCoordinatesToPlotID=0;
+
+selections.runSO=0;
+selections.plotSO=0;
+
+selections.selectTrialsSO=0;
+selections.selectXaxisSO=0;
 
 
 
@@ -221,6 +346,28 @@ set(handles.selectTrialsID,'Value',1);
 set(handles.runSO,'Value',1);
 set(handles.plotStorageSO, 'Enable', 'on')
 set(handles.plotStorageSO,'Value',1);
+
+global selections
+
+selections.runIK=1;
+selections.plotIK=1;
+
+selections.runMA=1;
+selections.plotMA=1;
+selections.selectTrialsMA=0;
+selections.selectXaxisMA=0;
+
+selections.runID=1;
+selections.plotID=1;
+selections.selectTrialsID=1;
+selections.selectCoordinatesToPlotID=0;
+
+selections.runSO=1;
+selections.plotSO=1;
+
+selections.selectTrialsSO=0;
+selections.selectXaxisSO=0;
+
 
 
 
@@ -397,7 +544,7 @@ function selectXaxisMA_Callback(hObject, eventdata, handles)
 global selections
 
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.selectXaxisMA = 1;
+	selections.selectXaxisMA = 1; 
 else
 	selections.selectXaxisMA =0;
 end
