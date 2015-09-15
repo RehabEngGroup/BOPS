@@ -1,0 +1,76 @@
+<plotSetting>
+    <ID>3dofsFlexorExtensor_left_ceinms</ID>
+	<osimModelName>gait2392</osimModelName>	
+    <MuscleGroups>	  
+       <Group>
+         <Name>Hip Flexors (L_hip_flex)</Name>  
+	     <MuscleList>
+	        <Muscle>add_brev_l</Muscle>			 
+            <Muscle>add_long_l</Muscle>
+            <Muscle>glut_med1_l</Muscle>
+            <Muscle>glut_min1_l</Muscle>
+            <Muscle>grac_l</Muscle>
+			<Muscle>iliacus_l</Muscle>
+			<Muscle>psoas_l</Muscle>
+            <Muscle>rect_fem_l</Muscle>
+            <Muscle>sar_l</Muscle>
+            <Muscle>tfl_l</Muscle>			
+         </MuscleList>  
+       </Group>
+       <Group>
+         <Name>Hip Extensors(L_hip_ext)</Name>
+	     <MuscleList>
+            <Muscle>add_mag1_l</Muscle>
+            <Muscle>add_mag2_l</Muscle>
+            <Muscle>add_mag3_l</Muscle>
+            <Muscle>bifemlh_l</Muscle>
+            <Muscle>glut_max1_l</Muscle>
+	        <Muscle>glut_max2_l</Muscle>
+            <Muscle>glut_max3_l</Muscle>
+            <Muscle>glut_min3_l</Muscle>
+            <Muscle>glut_med3_l</Muscle>
+            <Muscle>semimem_l</Muscle>
+	        <Muscle>semiten_l</Muscle>
+         </MuscleList>  
+       </Group>> 
+       <Group>
+         <Name>Knee Flexors (L_knee_bend)</Name>
+	     <MuscleList>
+            <Muscle>bifemlh_l</Muscle>
+            <Muscle>bifemsh_l</Muscle>	
+            <Muscle>grac_l</Muscle>			
+            <Muscle>med_gas_l</Muscle>
+	        <Muscle>lat_gas_l</Muscle>
+            <Muscle>sar_l</Muscle>
+            <Muscle>semimem_l</Muscle>
+	        <Muscle>semiten_l</Muscle>			
+         </MuscleList>  
+       </Group>
+       <Group>  
+	     <Name>Knee Extensors (L_knee_ext)</Name>
+	     <MuscleList>
+			<Muscle>rect_fem_l</Muscle>
+	        <Muscle>vas_med_l</Muscle>
+            <Muscle>vas_int_l</Muscle>
+            <Muscle>vas_lat_l</Muscle>
+         </MuscleList>  
+       </Group> 
+       <Group>
+         <Name>Ankle Plantar Flexion (L_ankle_pf)</Name>
+	     <MuscleList>
+            <Muscle>med_gas_l</Muscle>
+	        <Muscle>lat_gas_l</Muscle>		 
+            <Muscle>per_brev_l</Muscle>
+	        <Muscle>per_long_l</Muscle>		 
+            <Muscle>soleus_l</Muscle>
+         </MuscleList>  
+       </Group>
+       <Group>
+         <Name>Ankle DorsiFlexion (L_ankle_df)</Name>
+	     <MuscleList>
+            <Muscle>tib_ant_l</Muscle>
+            <Muscle>per_tert_l</Muscle>
+         </MuscleList>  
+       </Group> 
+    </MuscleGroups>	  
+</plotSetting>
