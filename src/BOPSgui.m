@@ -76,6 +76,49 @@ function BOPSgui_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose setDefault command line output for BOPSgui
 handles.output = hObject;
 
+set(handles.runIK,'Value',0);
+set(handles.PlotResultsIK,'Value',0);
+set(handles.PlotResultsIK, 'Enable', 'off')
+
+set(handles.runMA,'Value',0);
+set(handles.plotStorageMA,'Value',0);
+set(handles.plotStorageMA, 'Enable', 'off')
+set(handles.selectTrialsMA,'Value',0);
+set(handles.selectXaxisMA,'Value',0);
+
+set(handles.runID,'Value',0);
+set(handles.plotResultsID,'Value',0);
+set(handles.plotResultsID, 'Enable', 'off')
+set(handles.selectTrialsID,'Value',0);
+set(handles.selectCoordinatesToPlotID,'Value',0);
+
+set(handles.runSO,'Value',0);
+set(handles.plotStorageSO,'Value',0);
+set(handles.plotStorageSO, 'Enable', 'off')
+set(handles.selectTrialsSO,'Value',0);
+set(handles.selectXaxisSO,'Value',0);
+
+global selections
+
+selections.runIK=0;
+selections.plotIK=0;
+
+selections.runMA=0;
+selections.plotMA=0;
+selections.selectTrialsMA=0;
+selections.selectXaxisMA=0;
+
+selections.runID=0;
+selections.plotID=0;
+selections.selectTrialsID=0;
+selections.selectCoordinatesToPlotID=0;
+
+selections.runSO=0;
+selections.plotSO=0;
+
+selections.selectTrialsSO=0;
+selections.selectXaxisSO=0;
+
 % Update handles structure
 guidata(hObject, handles);
 

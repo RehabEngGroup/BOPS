@@ -66,7 +66,7 @@ if nargout>3
     
      if nargout == 5   %Get folder with Inverse Kinematics results to use for ID
          
-         IKresultsDir = uigetdir(' ', 'Select folder with INVERSE KINEMATICS results to use');
+         IKresultsDir = uigetdir('', 'Select folder with INVERSE KINEMATICS results to use');
      end
 end
 

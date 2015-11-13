@@ -20,7 +20,7 @@ function []=plotStorage(XaxisLabel)
 
 
 %% input dir
-resultsDir = uigetdir(' ', 'Select your results folder');
+resultsDir = uigetdir('', 'Select your results folder');
 
 %Get trials in the input folder
 trialsList = trialsListGeneration(resultsDir);
