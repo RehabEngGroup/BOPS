@@ -50,7 +50,7 @@ idTool.setResultsDir(results_directory);
 idTool.setOutputGenForceFileName([ 'inverse_dynamics.sto' ]);
 
 %retrieve input dir
-index=strfind(coordinates_file, '\ik');
+index=strfind(coordinates_file, [filesep 'ik']);
 idTool.setInputsDir(coordinates_file(1:index));
 
 %Set forces_to_exclude
@@ -72,19 +72,19 @@ end
 extLoadsXml = 'external_loads.xml';
 
 % Save the settings in the Setup folder
-setupFileDir=[results_directory '\Setup'];
+setupFileDir=[results_directory filesep 'Setup'];
 
 if exist(setupFileDir,'dir') ~= 7
     mkdir (setupFileDir);
 end
 
 %Write and then set External Load setup file
-xml_write([setupFileDir '\' extLoadsXml], externForcesTree, 'OpenSimDocument');
-idTool.setExternalLoadsFileName([setupFileDir '\' extLoadsXml]);
+xml_write([setupFileDir filesep extLoadsXml], externForcesTree, 'OpenSimDocument');
+idTool.setExternalLoadsFileName([setupFileDir filesep extLoadsXml]);
 
 %Print ID setup file
 setupFile = 'setup_ID.xml';
-idTool.print([setupFileDir '\' setupFile]);
+idTool.print([setupFileDir filesep setupFile]);
 
 %Run ID
 matlabdir=pwd;
@@ -95,9 +95,9 @@ cd(matlabdir);
 %idTool.run();
 
 %Save the log file in a Log folder for each trial
-logFolder=[results_directory '\Log'];
+logFolder=[results_directory filesep 'Log'];
 if exist(logFolder,'dir') ~= 7
     mkdir (logFolder);
 end
-movefile([setupFileDir '\out.log'],[logFolder '\out.log'])
-movefile([setupFileDir '\err.log'],[logFolder '\err.log'])
+movefile([setupFileDir filesep 'out.log'],[logFolder filesep 'out.log'])
+movefile([setupFileDir filesep 'err.log'],[logFolder filesep 'err.log'])

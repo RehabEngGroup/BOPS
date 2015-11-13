@@ -24,7 +24,7 @@ function [stoFiles, stoFilesID, musclesGroups,xlabel, Yaxislabel, varargout]=set
 
 %stoFilesName = uigetfile([trialsResultsDir{1} '\*.sto'], 'Select file');
 
-stoFilesName = dir([trialsResultsDir{1} '\*.sto']);
+stoFilesName = dir([trialsResultsDir{1} filesep '*.sto']);
 
 for k=1:length(stoFilesName)
         stoFilesList{k}=stoFilesName(k).name;

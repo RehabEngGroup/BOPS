@@ -26,17 +26,17 @@ nTrials=length(trialsList);
 
 for k=1:nTrials
     
-    inputTrialsFullFilePaths{k}=[inputDir '\' trialsList{k}];
+    inputTrialsFullFilePaths{k}=[inputDir filesep trialsList{k}];
     
     switch tag
         case '.trc'
                       
-            FileName{k}=dir([inputTrialsFullFilePaths{k} '\*.trc']);
+            FileName{k}=dir([inputTrialsFullFilePaths{k} filesep '*.trc']);
             nFile=1;
             
         case '.mot' %include results from IK (ik.mot) and .mot storing GRF
             
-            FileName{k}=dir([inputTrialsFullFilePaths{k} '\*.mot']);
+            FileName{k}=dir([inputTrialsFullFilePaths{k} filesep '*.mot']);
             
             %MOtoNMS store also emg.mot in the same folder of GRFmot
             nmotFiles=length(FileName{k});
@@ -57,7 +57,7 @@ for k=1:nTrials
             
             nFile=1;
             %FileName{k}=dir([inputTrialsFullFilePaths{k} '\Setup\external_loads.xml']);
-            FileName{k}(nFile).name=[ 'Setup\external_loads.xml'];
+            FileName{k}(nFile).name=[ 'Setup' filesep 'external_loads.xml'];
           
             
         otherwise
@@ -65,8 +65,8 @@ for k=1:nTrials
             
     end
     
-    FullFileName{k}=[inputTrialsFullFilePaths{k} '\' FileName{k}(nFile).name];
+    FullFileName{k}=[inputTrialsFullFilePaths{k} filesep FileName{k}(nFile).name];
     
-    RelativeFilePath{k}=['.\' trialsList{k} '\'  FileName{k}(nFile).name];
+    RelativeFilePath{k}=['.' filesep trialsList{k} filesep  FileName{k}(nFile).name];
       
 end

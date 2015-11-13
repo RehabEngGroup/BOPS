@@ -42,19 +42,19 @@ output_motion_file='ik.mot';
 ikTool.setMarkerDataFileName(marker_file);
 ikTool.setStartTime(initial_time);
 ikTool.setEndTime(final_time);
-ikTool.setOutputMotionFileName([results_directory '\' output_motion_file]);
+ikTool.setOutputMotionFileName([results_directory filesep output_motion_file]);
 
 
 % Save the settings in a setup file
 setupFile = 'setup_IK.xml';
 
-setupFileDir=[results_directory '\Setup'];
+setupFileDir=[results_directory filesep 'Setup'];
 
 if exist(setupFileDir,'dir') ~= 7
     mkdir (setupFileDir);
 end
 
-ikTool.print([setupFileDir '\' setupFile]);
+ikTool.print([setupFileDir filesep setupFile]);
 
 fprintf(['Performing IK \n']);
 

@@ -23,25 +23,25 @@ function [outputDir, trialsOutputDir] = outputFoldersDefinition(inputDir, inputT
 
 %%
 
-ind=strfind(inputDir, '\dynamicElaborations');
+ind=strfind(inputDir, [filesep 'dynamicElaborations']);
 
 %definition of output dir
 switch tag
     case 'IK'
         
-        outputDir=[inputDir(1:ind) 'inverseKinematics\' elaborationID '\'];
+        outputDir=[inputDir(1:ind) 'inverseKinematics' filesep elaborationID filesep];
         
     case 'ID'
         
-        outputDir=[inputDir(1:ind) 'inverseDynamics\' elaborationID '\'];
+        outputDir=[inputDir(1:ind) 'inverseDynamics' filesep elaborationID filesep];
         
     case 'SO'
         
-        outputDir=[inputDir(1:ind) 'staticOptimization\' elaborationID '\'];
+        outputDir=[inputDir(1:ind) 'staticOptimization' filesep elaborationID filesep];
         
     case 'MA'
         
-        outputDir=[inputDir(1:ind) 'muscleAnalysis\' elaborationID '\'];
+        outputDir=[inputDir(1:ind) 'muscleAnalysis' filesep elaborationID filesep];
         
         
     otherwise

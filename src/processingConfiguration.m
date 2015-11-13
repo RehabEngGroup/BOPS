@@ -23,26 +23,26 @@ function [inputDir, model_file] = processingConfiguration()
 %% input dir
 inputDir = uigetdir(' ', 'Select your trials folder');
 
-ind=strfind(inputDir, '\dynamicElaborations');
+ind=strfind(inputDir, [filesep 'dynamicElaborations']);
 
 
 %% model file
-scalingDir=[inputDir(1:ind) 'scaling\']; 
+scalingDir=[inputDir(1:ind) 'scaling' filesep]; 
     
 if exist(scalingDir,'dir') == 7
     
-    modelFile=dir([scalingDir '\*.osim']);
+    modelFile=dir([scalingDir filesep '*.osim']);
     modelFilePath=scalingDir;
     
     if length(modelFile)<2 
         modelFileName=modelFile.name;
         model_file=[scalingDir modelFileName];
     else
-        [modelFileName, modelFilePath] = uigetfile([scalingDir '\*.osim'], 'Select the .osim model');
+        [modelFileName, modelFilePath] = uigetfile([scalingDir filesep '*.osim'], 'Select the .osim model');
         model_file=[modelFilePath modelFileName];
     end
     
 else
-    [modelFileName, modelFilePath] = uigetfile([inputDir '\*.osim'], 'Select the .osim model');
+    [modelFileName, modelFilePath] = uigetfile([inputDir filesep '*.osim'], 'Select the .osim model');
     model_file=[modelFilePath modelFileName];
 end

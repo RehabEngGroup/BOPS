@@ -91,25 +91,25 @@ end
 
 
 %% Save the settings in the Setup folder
-setupFileDir=[results_directory '\Setup'];
+setupFileDir=[results_directory filesep 'Setup'];
 
 if exist(setupFileDir,'dir') ~= 7
     mkdir (setupFileDir);
 end
 
 setupFile='setup_SO.xml';
-analyzeTool.print([setupFileDir '\' setupFile ]);
+analyzeTool.print([setupFileDir filesep setupFile ]);
 
 %% Run
 runAnalyzeTool(setupFileDir, setupFile);
 
 %Save the log file in a Log folder for each trial
-logFolder=[results_directory '\Log'];
+logFolder=[results_directory filesep 'Log'];
 if exist(logFolder,'dir') ~= 7
     mkdir (logFolder);
 end
-movefile([setupFileDir '\out.log'],[logFolder '\out.log'])
-movefile([setupFileDir '\err.log'],[logFolder '\err.log'])
+movefile([setupFileDir filesep 'out.log'],[logFolder filesep 'out.log'])
+movefile([setupFileDir filesep 'err.log'],[logFolder filesep 'err.log'])
 
 
 
