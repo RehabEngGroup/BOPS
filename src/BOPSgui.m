@@ -76,6 +76,9 @@ function BOPSgui_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose setDefault command line output for BOPSgui
 handles.output = hObject;
 
+% Init handles
+handles.model_file='';
+handles.input_dir='';
 set(handles.runIK,'Value',0);
 set(handles.PlotResultsIK,'Value',0);
 set(handles.PlotResultsIK, 'Enable', 'off')
@@ -98,26 +101,6 @@ set(handles.plotStorageSO, 'Enable', 'off')
 set(handles.selectTrialsSO,'Value',0);
 set(handles.selectXaxisSO,'Value',0);
 
-global selections
-
-selections.runIK=0;
-selections.plotIK=0;
-
-selections.runMA=0;
-selections.plotMA=0;
-selections.selectTrialsMA=0;
-selections.selectXaxisMA=0;
-
-selections.runID=0;
-selections.plotID=0;
-selections.selectTrialsID=0;
-selections.selectCoordinatesToPlotID=0;
-
-selections.runSO=0;
-selections.plotSO=0;
-
-selections.selectTrialsSO=0;
-selections.selectXaxisSO=0;
 
 % Update handles structure
 guidata(hObject, handles);
@@ -189,14 +172,10 @@ function selectProcessingConfiguration_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global inputDir model_file
-
 [inputDir, model_file]=processingConfiguration();
-%handles.inputDir=inputDir;
-%handles.model_file=model_file;
 set(handles.loadedInputFolder, 'String', inputDir);
 set(handles.lodedModel, 'String', model_file);
-
+guidata(hObject,handles)
 
 
 % --- Executes on button press in CloseButton.
@@ -204,7 +183,7 @@ function CloseButton_Callback(hObject, eventdata, handles)
 % hObject    handle to CloseButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-close(BOPSgui)
+close(gcf)
 
 
 % --- Executes on button press in RunButton.
@@ -213,126 +192,127 @@ function RunButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global selections inputDir model_file
-
+inputDir = get(handles.loadedInputFolder, 'String');
+model_file = get(handles.lodedModel, 'String');
 %% IK
-if selections.runIK == 1
+if get(handles.runIK , 'Value')== 1
     [IKoutputDir, IKtrialsOutputDir, IKprocessedTrials]=InverseKinematics(inputDir, model_file); 
-end
 
-% Plotting IK Results
-if selections.plotIK == 1
-    IKmotFilename='ik.mot'; %our default name
-    set(handles.figure1, 'HandleVisibility', 'off');
-    [coordinates,Xaxislabel]=plotResults('IK', IKoutputDir, IKtrialsOutputDir, model_file, IKprocessedTrials, IKmotFilename);
-    set(handles.figure1, 'HandleVisibility', 'on');
-end
 
+    % Plotting IK Results
+    if get(handles.PlotResultsIK, 'Value') == 1
+        IKmotFilename='ik.mot'; %our default name
+        set(handles.figure1, 'HandleVisibility', 'off');
+        [coordinates,Xaxislabel]=plotResults('IK', IKoutputDir, IKtrialsOutputDir, model_file, IKprocessedTrials, IKmotFilename);
+        set(handles.figure1, 'HandleVisibility', 'on');
+    end
+
+end
 
 %% MA
 
-if selections.runMA==1
+if get(handles.runMA, 'Value') == 1
     %when run IK before & want to process the same trials
-    if selections.runIK==1 && selections.selectTrialsMA==0
+    if get(handles.runIK, 'Value')==1 && get(handles.selectTrialsMA, 'Value')==0
         [MAoutputDir,MAtrialsOutputDir, MAprocessedTrials]=MuscleAnalysis(inputDir, model_file, IKoutputDir, IKprocessedTrials);
     end
     
     %when run IK before, but MA on different trials
-    if  selections.runIK==1 && selections.selectTrialsMA==1
+    if  get(handles.runIK, 'Value')==1 && get(handles.selectTrialsMA, 'Value')==1
         [MAoutputDir, MAtrialsOutputDir, MAprocessedTrials]=MuscleAnalysis(inputDir, model_file, IKoutputDir);
     end
     
     %if no IK before:
-    if  selections.runIK==0
+    if  get(handles.runIK, 'Value')==0
         [MAoutputDir, MAtrialsOutputDir, MAprocessedTrials]=MuscleAnalysis(inputDir, model_file);
     end
-end
 
-% Plot Storage (MA)
-if selections.plotMA==1
-    set(handles.figure1, 'HandleVisibility', 'off');
-    if exist('Xaxislabel','var') && selections.selectXaxisMA==0
-        plotStorage(Xaxislabel)
-    else
-        plotStorage()
-        
+
+    % Plot Storage (MA)
+    if get(handles.plotStorageMA, 'Value')==1
+        set(handles.figure1, 'HandleVisibility', 'off');
+        if exist('Xaxislabel','var') && get(handles.selectXaxisMA, 'Value')==0
+            plotStorage(Xaxislabel)
+        else
+            plotStorage()
+
+        end
+        set(handles.figure1, 'HandleVisibility', 'on');
     end
-    set(handles.figure1, 'HandleVisibility', 'on');
+
 end
-
-
 
 %% ID
 
-if selections.runID==1
+if get(handles.runID, 'Value') ==1
     
     %when run IK before & want to process the same trials
-    if selections.runIK==1 && selections.selectTrialsID==0
+    if get(handles.runIK, 'Value')==1 && get(handles.selectTrialsID, 'Value')==0
         [IDoutputDir, IDtrialsOutputDir, IDprocessedTrials]=InverseDynamics(inputDir, model_file, IKoutputDir, IKprocessedTrials);
     end
     
     %when run IK before, but ID on different trials
-    if selections.runIK==1 && selections.selectTrialsID==1
+    if get(handles.runIK, 'Value')==1 && get(handles.selectTrialsID, 'Value')==1
         [IDoutputDir, IDtrialsOutputDir, IDprocessedTrials]=InverseDynamics(inputDir, model_file, IKoutputDir);
     end
     
     %if no IK before:
-    if  selections.runIK==0
+    if get(handles.runIK, 'Value')==0
         [IDoutputDir, IDtrialsOutputDir, IDprocessedTrials]=InverseDynamics(inputDir, model_file);
     end
-end
 
-% Plotting ID Results
-if selections.plotID==1
-    IDfilename='inverse_dynamics.sto';
-    set(handles.figure1, 'HandleVisibility', 'off');
-    
-    if selections.runIK==1
-        if exist('coordinates','var') && selections.selectCoordinatesToPlotID==0 && exist('Xaxislabel','var') %same X-axis label
-            plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates, Xaxislabel);
-        else if exist('coordinates','var') && selections.selectCoordinatesToPlotID==0       %same coordinates, different X axis
-                plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates); %add "_moment" to coordinates
-            else if selections.selectCoordinatesToPlotID==1
-                    plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename);
+    % Plotting ID Results
+    if get(handles.plotResultsID, 'Value')==1
+        IDfilename='inverse_dynamics.sto';
+        set(handles.figure1, 'HandleVisibility', 'off');
+
+        if get(handles.runIK, 'Value')==1
+            if exist('coordinates','var') && handles.selectCoordinatesToPlotID==0 && exist('Xaxislabel','var') %same X-axis label
+                plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates, Xaxislabel);
+            else if exist('coordinates','var') && handles.selectCoordinatesToPlotID==0       %same coordinates, different X axis
+                    plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename, coordinates); %add "_moment" to coordinates
+                else if handles.selectCoordinatesToPlotID==1
+                        plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename);
+                    end
                 end
             end
+        else  %if no IK before
+            plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename);
         end
-    else  %if no IK before
-        plotResults('ID', IDoutputDir, IDtrialsOutputDir, model_file, IDprocessedTrials, IDfilename);
+        set(handles.figure1, 'HandleVisibility', 'on');
     end
-    set(handles.figure1, 'HandleVisibility', 'on');
 end
 
 %% SO
 
-if selections.runSO==1
+if handles.runSO==1
     
     %when run IK and ID before & want to process the same trials (of ID)
-    if selections.runIK==1 && selections.runID==1 && selections.selectTrialsSO==0       
+    if handles.runIK==1 && handles.runID==1 && handles.selectTrialsSO==0
         [SOoutputDir,SOtrialsOutputDir, SOprocessedTrials]=StaticOptimization(inputDir, model_file, IKoutputDir, IDoutputDir, IDprocessedTrials);
     end
     
     %when run IK and ID before, but SO on different trials
-    if selections.runIK==1 && selections.runID==1 && selections.selectTrialsSO==1        
+    if handles.runIK==1 && handles.runID==1 && handles.selectTrialsSO==1
         [SOoutputDir,SOtrialsOutputDir, SOprocessedTrials]=StaticOptimization(inputDir, model_file, IKoutputDir, IDoutputDir);
     end
        
     %if no IK and ID before:
-    if  selections.runIK==0 && selections.runID==0
+    if  handles.runIK==0 && handles.runID==0
         [SOoutputDir,SOtrialsOutputDir, SOprocessedTrials]=StaticOptimization(inputDir, model_file);
     end
-end
 
-% Plot Storage (SO)
-if selections.plotSO==1
-    set(handles.figure1, 'HandleVisibility', 'off');
-    
-    if exist('Xaxislabel','var') && selections.selectXaxisSO==0
-        plotStorage(Xaxislabel)
-    else
-        plotStorage()
+    % Plot Storage (SO)
+    if handles.plotStorageSO==1
+        set(handles.figure1, 'HandleVisibility', 'off');
+
+        if exist('Xaxislabel','var') && handles.selectXaxisSO==0
+            plotStorage(Xaxislabel)
+        else
+            plotStorage()
+        end
+        set(handles.figure1, 'HandleVisibility', 'on');
     end
-    set(handles.figure1, 'HandleVisibility', 'on');
 end
 
 save_to_base(1)
@@ -365,28 +345,7 @@ set(handles.plotStorageSO, 'Enable', 'off')
 set(handles.selectTrialsSO,'Value',0);
 set(handles.selectXaxisSO,'Value',0);
 
-global selections
-
-selections.runIK=0;
-selections.plotIK=0;
-
-selections.runMA=0;
-selections.plotMA=0;
-selections.selectTrialsMA=0;
-selections.selectXaxisMA=0;
-
-selections.runID=0;
-selections.plotID=0;
-selections.selectTrialsID=0;
-selections.selectCoordinatesToPlotID=0;
-
-selections.runSO=0;
-selections.plotSO=0;
-
-selections.selectTrialsSO=0;
-selections.selectXaxisSO=0;
-
-
+guidata(hObject,handles)
 
 % --- Executes on button press in setDefault.
 function setDefault_Callback(hObject, eventdata, handles)
@@ -411,29 +370,7 @@ set(handles.runSO,'Value',1);
 set(handles.plotStorageSO, 'Enable', 'on')
 set(handles.plotStorageSO,'Value',1);
 
-global selections
-
-selections.runIK=1;
-selections.plotIK=1;
-
-selections.runMA=1;
-selections.plotMA=1;
-selections.selectTrialsMA=0;
-selections.selectXaxisMA=0;
-
-selections.runID=1;
-selections.plotID=1;
-selections.selectTrialsID=1;
-selections.selectCoordinatesToPlotID=0;
-
-selections.runSO=1;
-selections.plotSO=1;
-
-selections.selectTrialsSO=0;
-selections.selectXaxisSO=0;
-
-
-
+guidata(hObject,handles)
 
 % --- Executes on button press in runIK.
 function runIK_Callback(hObject, eventdata, handles)
@@ -443,16 +380,13 @@ function runIK_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of runIK
 
-global selections
-
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.runIK = 1;
     set(handles.PlotResultsIK, 'Enable', 'on')
 else
-	selections.runIK =0;
     set(handles.PlotResultsIK, 'Enable', 'off')
 end
 
+guidata(hObject,handles)
 
 % --- Executes on button press in PlotResultsIK.
 function PlotResultsIK_Callback(hObject, eventdata, handles)
@@ -462,15 +396,13 @@ function PlotResultsIK_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of PlotResultsIK
 
-global selections
-
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.plotIK = 1;
+    set(handles.PlotResultsIK, 'Value', 1)
 else
-	selections.plotIK =0;
+    set(handles.PlotResultsIK, 'Value', 0)
 end
 
-
+guidata(hObject,handles)
 
 % --- Executes on button press in runMA.
 function runMA_Callback(hObject, eventdata, handles)
@@ -479,16 +411,14 @@ function runMA_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of runMA
-global selections
     
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.runMA = 1;
     set(handles.plotStorageMA, 'Enable', 'on')
 else
-	selections.runMA =0;
     set(handles.plotStorageMA, 'Enable', 'off')
 end
 
+guidata(hObject,handles)
 
 % --- Executes on button press in plotStorageMA.
 function plotStorageMA_Callback(hObject, eventdata, handles)
@@ -497,15 +427,14 @@ function plotStorageMA_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of plotStorageMA
-global selections
 
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.plotMA = 1;
+    set(handles.plotStorageMA, 'Value', 1)
 else
-	selections.plotMA =0;
+    set(handles.plotStorageMA, 'Value', 0)
 end
 
-
+guidata(hObject,handles)
 
 % --- Executes on button press in runID.
 function runID_Callback(hObject, eventdata, handles)
@@ -515,16 +444,14 @@ function runID_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of runID
 
-global selections
-
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.runID = 1;
+
     set(handles.plotResultsID, 'Enable', 'on')
 else
-	selections.runID =0;
     set(handles.plotResultsID, 'Enable', 'off')
 end
 
+guidata(hObject,handles)
 
 % --- Executes on button press in plotResultsID.
 function plotResultsID_Callback(hObject, eventdata, handles)
@@ -533,15 +460,14 @@ function plotResultsID_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of plotResultsID
-global selections
-
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.plotID = 1;
+
+    set(handles.plotResultsID, 'Value', 1)
 else
-	selections.plotID =0;
+    set(handles.plotResultsID,'Value', 0)
 end
 
-
+guidata(hObject,handles)
 
 % --- Executes on button press in runSO.
 function runSO_Callback(hObject, eventdata, handles)
@@ -551,16 +477,13 @@ function runSO_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of runSO
 
-global selections
-
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.runSO = 1;
     set(handles.plotStorageSO, 'Enable', 'on')
 else
-	selections.runSO =0;
     set(handles.plotStorageSO, 'Enable', 'off')
 end
 
+guidata(hObject,handles)
 
 % --- Executes on button press in plotStorageSO.
 function plotStorageSO_Callback(hObject, eventdata, handles)
@@ -570,15 +493,13 @@ function plotStorageSO_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of plotStorageSO
 
-global selections
-
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.plotSO = 1;
+    set(handles.plotStorageSO, 'Value', 1)
 else
-	selections.plotSO =0;
+    set(handles.plotStorageSO, 'Value', 0)
 end
 
-
+guidata(hObject,handles)
 
 % --- Executes on button press in selectTrialsMA.
 function selectTrialsMA_Callback(hObject, eventdata, handles)
@@ -588,14 +509,13 @@ function selectTrialsMA_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of selectTrialsMA
 
-global selections
-
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.selectTrialsMA = 1;
+	set(handles.selectTrialsMA, 'Value', 1)
 else
-	selections.selectTrialsMA =0;
+    set(handles.selectTrialsMA, 'Value', 0)
 end
 
+guidata(hObject,handles)
 
 % --- Executes on button press in selectXaxisMA.
 function selectXaxisMA_Callback(hObject, eventdata, handles)
@@ -605,15 +525,13 @@ function selectXaxisMA_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of selectXaxisMA
 
-global selections
-
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.selectXaxisMA = 1; 
+	set(handles.selectXaxisMA, 'Value', 1)
 else
-	selections.selectXaxisMA =0;
+	set(handles.selectXaxisMA, 'Value', 0)
 end
 
-
+guidata(hObject,handles)
 
 % --- Executes on button press in selectTrialsID.
 function selectTrialsID_Callback(hObject, eventdata, handles)
@@ -623,15 +541,13 @@ function selectTrialsID_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of selectTrialsID
 
-global selections
-
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.selectTrialsID = 1;
+	set(handles.selectTrialsID, 'Value', 1)
 else
-	selections.selectTrialsID =0;
+	set(handles.selectTrialsID, 'Value', 0)
 end
 
-
+guidata(hObject,handles)
 
 % --- Executes on button press in selectCoordinatesToPlotID.
 function selectCoordinatesToPlotID_Callback(hObject, eventdata, handles)
@@ -641,15 +557,14 @@ function selectCoordinatesToPlotID_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of selectCoordinatesToPlotID
 
-global selections
 
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.selectCoordinatesToPlotID = 1;
+	set(handles.selectCoordinatesToPlotID, 'Value', 1)
 else
-	selections.selectCoordinatesToPlotID =0;
+	set(handles.selectCoordinatesToPlotID, 'Value', 0)
 end
 
-
+guidata(hObject,handles)
 
 % --- Executes on button press in selectTrialsSO.
 function selectTrialsSO_Callback(hObject, eventdata, handles)
@@ -659,14 +574,13 @@ function selectTrialsSO_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of selectTrialsSO
 
-global selections
-
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.selectTrialsSO = 1;
+	set(handles.selectTrialsSO, 'Value', 1)
 else
-	selections.selectTrialsSO =0;
+	set(handles.selectTrialsSO, 'Value', 0)
 end
 
+guidata(hObject,handles)
 
 % --- Executes on button press in selectXaxisSO.
 function selectXaxisSO_Callback(hObject, eventdata, handles)
@@ -676,10 +590,10 @@ function selectXaxisSO_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of selectXaxisSO
 
-global selections
-
 if (get(hObject,'Value') == get(hObject,'Max'))
-	selections.selectXaxisSO = 1;
+	set(handles.selectXaxisSO, 'Value', 1)
 else
-	selections.selectXaxisSO =0;
+	set(handles.selectXaxisSO, 'Value', 0)
 end
+
+guidata(hObject,handles)
