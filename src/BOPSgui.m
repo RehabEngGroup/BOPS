@@ -77,8 +77,6 @@ function BOPSgui_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
 % Init handles
-handles.model_file='';
-handles.input_dir='';
 set(handles.runIK,'Value',0);
 set(handles.PlotResultsIK,'Value',0);
 set(handles.PlotResultsIK, 'Enable', 'off')
