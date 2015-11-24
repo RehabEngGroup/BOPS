@@ -171,6 +171,15 @@ function selectProcessingConfiguration_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 [inputDir, model_file]=processingConfiguration();
+% check that input dir is in a dynamicElaborations folder, otherwise we
+% will not be able to set output paths correctly
+ind=strfind(inputDir, [filesep 'dynamicElaborations']);
+
+if isempty(ind)
+    h=errordlg(['Input dir ' inputDir ' does not contain a ' filesep 'dynamicElaborations subfolder']);
+    uiwait(h);
+    return
+end
 set(handles.loadedInputFolder, 'String', inputDir);
 set(handles.lodedModel, 'String', model_file);
 guidata(hObject,handles)
