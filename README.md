@@ -22,7 +22,7 @@ Meanwhile, please refer to this README for a basic introduction.
 
 1. Configure MATLAB for the use of OpenSim API (follow the instructions available [here] [3])
 
-2. Unzip the archive of BOPS (available [here][2]) 
+2. Unzip the archive of BOPS (available [here][2]).
 
 This release includes three directories:
 
@@ -32,13 +32,21 @@ This release includes three directories:
 
 ## Execution ##
 
-#### Using the GUI ####
+#### Running the GUI ####
 
 1. Set MATLAB path to `BOPS/src` folder
 2. Run `BOPSgui.m`
 
-##### How to set the processing input  #####
-BOPS requires an input folder for its execution. Please select a folder in the dynamicElaborations folder created by MOtoNMS tool. If you are not familiar with this folder structure you can refer to the [MOtoNMS User Manual] [5].
+#### Using the GUI ####
+
+1. Once the GUI is started, fill in the `Settings` panel by pressing the `Select` button. 
+You will be asked to set your input data folder and the OpenSim scaled model.
+2. Select the OpenSim procedures you want to run (IK, MA, ID and/or SO) and if you want to plot the corresponding results, by using the radio buttons.
+3. Press the `Run` button, to run.
+4. Depending on the procedures you selected, a series of GUI windows will open, asking for the necessary inputs according to your choices. Fill in the required information.
+
+##### Settings panel: How to set the processing input  #####
+BOPS requires an input folder for its execution. Please select a folder in the dynamicElaborations folder created by MOtoNMS tool. If you are not familiar with this folder structure, you can refer to the [MOtoNMS User Manual] [5].
 
 ### Advanced use ###
 The use of the GUI is not mandatory. Advanced users can create a `main.m` script and call directly the functions. An example with some notes is provided.
@@ -46,6 +54,11 @@ The use of the GUI is not mandatory. Advanced users can create a `main.m` script
 ## WARNINGS ##
 - Install BOPS in a folder that you can modify. Therefore, **DO NOT** install BOPS in Administrator folders, such as the Program Files folder;
 - File Paths **MUST NOT** include blank spaces due to a limitation in OpenSim SO.
+- Your experimental input data **MUST** be already prepared for their use in OpenSim (`.trc` and `.mot` file formats) **before** starting using BOPS. 
+A list of tools to accomplish this first step of converting experimental data into OpenSim file formats is available from the [OpenSim website] [6]. 
+We recommend the use of [MOtoNMS] [4], since BOPS has been designed based on the folders structure created by MOtoNMS. 
+- The input data folder **MUST** be inside a folder named `dynamicElaborations` (please refer to the [MOtoNMS User Manual] [5] for more details).
+
 
 ## Contacts ##
 - If you need help using BOPS, please ask your questions in the BOPS Public Forum, available from the SimTK project page: <https://simtk.org/home/bops>, or send an email to <ali.mantoan@gmail.com> and <monica.reggiani@gmail.com>
@@ -67,7 +80,11 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 
-When using BOPS, please acknowledge the authors.
+When using BOPS, please acknowledge the authors and cite:
+
+> Alice Mantoan and Monica Reggiani. (2015). BOPS v0.9. _Zenodo_. 
+DOI: **10.5281/zenodo.31053**, 
+DOI URL: <http://dx.doi.org/10.5281/zenodo.31053>
 
 ========
 
@@ -76,4 +93,5 @@ When using BOPS, please acknowledge the authors.
 [3]: http://simtk-confluence.stanford.edu:8080/display/OpenSim/Scripting+with+Matlab
 [4]: https://simtk.org/home/motonms
 [5]: http://rehabenggroup.github.io/MOtoNMS/manual/folders.html#data-organization
+[6]: http://simtk-confluence.stanford.edu:8080/display/OpenSim/Tools+for+Preparing+Motion+Data
 
