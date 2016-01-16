@@ -21,7 +21,7 @@ function [inputDir, model_file] = processingConfiguration()
 
 
 %% input dir
-inputDir = uigetdir('', 'Select your trials folder');
+inputDir = uigetdir('', 'Select one of your elaborations in the "dynamicElaborations" folder'); 
 
 ind=strfind(inputDir, [filesep 'dynamicElaborations']);
 
