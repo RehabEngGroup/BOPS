@@ -54,6 +54,8 @@ The use of the GUI is not mandatory. Advanced users can create a `main.m` script
 
 ## Redistribution: Terms and Conditions ##
 
+Copyright (C) 2020 Bruno Bedo, Danilo Catelli, William Cruaud, Mario Lamontagne
+
 Copyright (C) 2015 Alice Mantoan, Monica Reggiani
  
 Licensed under the Apache License, Version 2.0 (the "License");

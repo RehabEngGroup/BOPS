@@ -2,6 +2,8 @@ function [IKoutputDir,IKtrialsOutputDir, varargout] = runInverseKinematics(input
 % Function to run IK for multiple trials
 
 % This file is part of Batch OpenSim Processing Scripts (BOPS).
+%
+% Copyright (C) 2020 Bruno Bedo, Danilo Catelli, William Cruaud, Mario Lamontagne
 % Copyright (C) 2015 Alice Mantoan, Monica Reggiani
 % 
 % Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +18,8 @@ function [IKoutputDir,IKtrialsOutputDir, varargout] = runInverseKinematics(input
 % See the License for the specific language governing permissions and
 % limitations under the License.
 %
-% Alice Mantoan, Monica Reggiani
-% <ali.mantoan@gmail.com>, <monica.reggiani@gmail.com>
+% Author(s): Alice Mantoan, <ali.mantoan@gmail.com>
+%            Monica Reggiani, <monica.reggiani@gmail.com>
 
 
 %%
