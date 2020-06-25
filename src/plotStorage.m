@@ -17,16 +17,26 @@ function []=plotStorage(XaxisLabel)
 % See the License for the specific language governing permissions and
 % limitations under the License.
 %
-% Author(s): Alice Mantoan, <ali.mantoan@gmail.com>
-%            Monica Reggiani, <monica.reggiani@gmail.com>
+% Author(s): Alice Mantoan,     <ali.mantoan@gmail.com>
+%            Monica Reggiani,   <monica.reggiani@gmail.com>
+%            Bruno Bedo,        <bruno.bedo@usp.rb>
 
-
+global selections
 %% input dir
+if  isempty(selections.SOpathRes)
 resultsDir = uigetdir(' ', 'Select your results folder');
+else
+    resultsDir = selections.SOpathRes;
+end
 
 %Get trials in the input folder
+if isempty(selections.ListTrials)
 trialsList = trialsListGeneration(resultsDir);
 inputTrials=trialsList;
+else
+    trialsList = selections.trials(selections.ListTrials);
+    inputTrials = selections.trials(selections.ListTrials);
+end
 
 %definition of the output folder for each trial
 for k=1:length(trialsList)  

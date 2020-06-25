@@ -18,8 +18,9 @@ function []=plotResultsMultipleTrials(resultsPath, trialsList, filename,x, Yquan
 % See the License for the specific language governing permissions and
 % limitations under the License.
 %
-% Author(s): Alice Mantoan, <ali.mantoan@gmail.com>
-%            Monica Reggiani, <monica.reggiani@gmail.com>
+% Author(s): Alice Mantoan,     <ali.mantoan@gmail.com>
+%            Monica Reggiani,   <monica.reggiani@gmail.com>
+%            Bruno Bedo,        <bruno.bedo@usp.rb>
 
 
 %%
@@ -83,11 +84,12 @@ for k=1:size(y,1)
         hold on
         
         xlabel(x)
-        ylabel([plotLabels(j)])
+        tit = coord_idx(j);
+        ylabel([file.colheaders{tit}])
         warning off
         legend(legendLabels)
         %title(filename)
         
-        saveas(h(j),[figurePath  Yquantities{j} '.fig'])
+        saveas(h(j),[figurePath  file.colheaders{tit} '.fig'])
     end
 end

@@ -18,13 +18,21 @@ function [stoFiles, stoFilesID, musclesGroups,xlabel, Yaxislabel, varargout]=set
 % See the License for the specific language governing permissions and
 % limitations under the License.
 %
-% Author(s): Alice Mantoan, <ali.mantoan@gmail.com>
-%            Monica Reggiani, <monica.reggiani@gmail.com>
-
+% Author(s): Alice Mantoan,     <ali.mantoan@gmail.com>
+%            Monica Reggiani,   <monica.reggiani@gmail.com>
+%            Bruno Bedo,        <bruno.bedo@usp.rb>
+%            Danilo S. Catelli, <danilo.catelli@uottawa.ca>
+%            William Cruaud,    <w.cruaud@hotmail.fr>
+%            Mario Lamontagne,  <mlamon@uottawa.ca>
 
 %%
 
 %stoFilesName = uigetfile([trialsResultsDir{1} '\*.sto'], 'Select file');
+%Get template for the XML setup file
+originalPath=pwd;
+cd('..')
+TemplatePath=[pwd filesep fullfile('Templates','PlotStorage') filesep];   
+cd(originalPath)
 
 stoFilesName = dir([trialsResultsDir{1} '\*.sto']);
 
@@ -32,7 +40,8 @@ for k=1:length(stoFilesName)
         stoFilesList{k}=stoFilesName(k).name;
 end
 
-
+global selections
+if selections.LoadTemplateSO ==1
 [stoFilesIndex,v] = listdlg('PromptString','Select .sto files to plot:',...
     'SelectionMode','multiple',...
     'ListString',stoFilesList);
@@ -41,20 +50,29 @@ stoFiles=stoFilesList(stoFilesIndex);
 
 stoFilesID=extractSTOfileContents(stoFiles);
 
-%Get template for the XML setup file
-originalPath=pwd;
-cd('..')
-TemplatePath=[pwd filesep fullfile('Templates','PlotStorage') filesep];   
-cd(originalPath)
 
 [filename, pathname] = uigetfile([TemplatePath '*.xml'], 'Select setup file for plotting .sto file');
 
 plotSetupFile = [pathname filename]; 
+elseif selections.LoadTemplateSO==0
+      plotSetupFile = [TemplatePath char(selections.SOPlotSetupList)];
+        if strcmp('Force',char(selections.SOselectplot))
+           stoFiles = {'_StaticOptimization_force.sto'};
+           stoFilesID = {'force'};
+        elseif strcmp('Activation',char(selections.SOselectplot))
+               stoFiles = {'_StaticOptimization_activation.sto'};
+               stoFilesID = {'activation'};
+        else
+            disp(' ')
+            error('The SO files are empty')
+        end
+end
 
 [musclesGroups]=muscleGroupsFromXMLSetup(plotSetupFile);
 
-
 if nargout >3
+    
+    if isempty(selections.XAxis)
     %Set x-axis
     
     %default value
@@ -75,6 +93,9 @@ if nargout >3
         'ListString',x_labels);
     
     xlabel=x_labels{xlabelIndex};
+    else
+    xlabel = char(selections.XAxis);
+    end
     
 end
 %Set Y-axis unit
