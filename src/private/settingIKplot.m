@@ -18,8 +18,12 @@ function [dofsToPlot,xaxislabel]=settingIKplot(model_file, varargin)
 % See the License for the specific language governing permissions and
 % limitations under the License.
 %
-% Author(s): Alice Mantoan, <ali.mantoan@gmail.com>
-%            Monica Reggiani, <monica.reggiani@gmail.com>
+% Author(s): Alice Mantoan,     <ali.mantoan@gmail.com>
+%            Monica Reggiani,   <monica.reggiani@gmail.com>
+%            Bruno Bedo,        <bruno.bedo@usp.rb>
+%            Danilo S. Catelli, <danilo.catelli@uottawa.ca>
+%            William Cruaud,    <w.cruaud@hotmail.fr>
+%            Mario Lamontagne,  <mlamon@uottawa.ca>
 
 
 %%
@@ -27,6 +31,11 @@ function [dofsToPlot,xaxislabel]=settingIKplot(model_file, varargin)
 import org.opensim.modeling.*
 
 %1- Definition of Dof for plotting
+global selections
+if selections.plotALLIK==1
+   dofs=getDofsFromModel(model_file);
+   dofsToPlot=dofs';
+elseif selections.plotIK==1
 if nargin==1
     
     dofs=getDofsFromModel(model_file);
@@ -35,8 +44,7 @@ if nargin==1
         'SelectionMode','multiple',...
         'ListString',dofs);
     
-    dofsToPlot=dofs(selectedDofsIndex)';
-    
+    dofsToPlot=dofs(selectedDofsIndex)';   
 %remove hard coded settings
 % else  
 %     %WARNING: BE SURE to change this HARD-CODED values
@@ -53,7 +61,7 @@ if nargin==1
 %         strcat('subtalar_angle_',side);
 %         };
 end
-
+end
 
 %2- Set x-axis
 
@@ -62,16 +70,18 @@ end
 
 %Possible choices
 %Uncomment this part if you want to ask to the user 
-x_labels={
-    '% Analysis Window';
-    '% Stance';
-    '% Gait Cycle';
-    '% time';
-    'time [s]';
-    };
+% x_labels={
+%     '% Analysis Window';
+%     '% Stance';
+%     '% Gait Cycle';
+%     '% time';
+%     'time [s]';
+%     };
+% 
+% [xlabelIndex,v] = listdlg('PromptString','Select x-axis for plots:',...
+%     'SelectionMode','single',...
+%     'ListString',x_labels);
+% xaxislabel=x_labels{xlabelIndex};
 
-[xlabelIndex,v] = listdlg('PromptString','Select x-axis for plots:',...
-    'SelectionMode','single',...
-    'ListString',x_labels);
+xaxislabel = char(selections.XAxis);
 
-xaxislabel=x_labels{xlabelIndex};

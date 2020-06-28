@@ -18,55 +18,73 @@ function [SOid, XMLsetupTemplate, fcut_coordinates, SOActuators, inputTrials, IK
 % See the License for the specific language governing permissions and
 % limitations under the License.
 %
-% Author(s): Alice Mantoan, <ali.mantoan@gmail.com>
-%            Monica Reggiani, <monica.reggiani@gmail.com>
+% Author(s): Alice Mantoan,     <ali.mantoan@gmail.com>
+%            Monica Reggiani,   <monica.reggiani@gmail.com>
+%            Bruno Bedo,        <bruno.bedo@usp.rb>
+%            Danilo S. Catelli, <danilo.catelli@uottawa.ca>
+%            William Cruaud,    <w.cruaud@hotmail.fr>
+%            Mario Lamontagne,  <mlamon@uottawa.ca>
 
 
 %%
 
-%Get processing identifier 
-dialogText = 'Select a processing identifier for the Static Optimization';
-SOid = char(inputdlg(sprintf(dialogText)));
-
-%Get template for the XML setup file
+%Get processing identifier
 originalPath=pwd;
 cd('..')
 TemplatePath=[pwd filesep fullfile('Templates','StaticOptimization') filesep];
 cd(originalPath)
 
+global selections
+if selections.LoadTemplateSO ==1
+dialogText = 'Select a processing identifier for the Static Optimization';
+SOid = char(inputdlg(sprintf(dialogText)));
+
+%Get template for the XML setup file
 [filename, pathname] = uigetfile([TemplatePath '*.xml'], 'Select XML Template for the setup file');
 
 XMLsetupTemplate = [pathname filename];
+else
+   XMLsetupTemplate = [TemplatePath char(selections.TamplateListSO)];
+   SOid = char.empty(1,0);
+end
 
 %definition of lowpass frequency cut off for filtering coordinates
+if  selections.SOLowPass <=0  
 num_lines = 1;
 options.Resize='on';
 options.WindowStyle='modal';
 defValue{1}='6';
 
-dlg_title='Choose the low-pass cut-off frequency for filtering the coordinates_file data';
+dlg_title='Choose the low-pass cut-off frequency for filtering the coordinates_file data ';
 prompt ='lowpass_cutoff_frequency_for_coordinates (-1 disable filtering)';
 
 answer = inputdlg(prompt,dlg_title,num_lines,defValue,options);
 
 fcut_coordinates=str2num(answer{1});
-
+else
+    fcut_coordinates = selections.SOLowPass;
+end
 
 %OPTIONAL:
-
-if nargout>3
-    
     %Get template for the XML setup file
     originalPath=pwd;
     cd('..')
     TemplatePath=[pwd filesep fullfile('Templates','StaticOptimization') filesep];
     cd(originalPath)
     
+if selections.LoadActuadors ==1
+    if nargout>3
     [Afilename, Apathname] = uigetfile([TemplatePath '*.xml'], 'Select Actuators');
     save_to_base(1)
     SOActuators = [Apathname Afilename];
+    end
+else
+    SOActuators = [TemplatePath char(selections.ActuatorsList)];
+end
     
     if nargout>4
+        if isempty(selections.ListTrials)
+        [IKid, IKTemplateXml,inputTrials] = IKinput(trialsList);
         %%Selection of trials to elaborate from the list
         
         [trialsIndex,v] = listdlg('PromptString','Select trials to elaborate:',...
@@ -74,9 +92,11 @@ if nargout>3
             'ListString',trialsList);
         
         inputTrials=trialsList(trialsIndex);
+        else
+        inputTrials = trialsList(selections.ListTrials);
+        end
         
         if nargout > 5
-            
             %Get folder with Inverse Kinematics results
             IKresultsDir = uigetdir(' ', 'Select folder with INVERSE KINEMATICS results to use');
             
@@ -87,4 +107,3 @@ if nargout>3
             end
         end
     end
-end

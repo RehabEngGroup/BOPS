@@ -66,14 +66,28 @@ for k=1:nTrials
                 colheaders=str_sep(strheaders);
                 coord_idx=findIndexes(colheaders,Yquantities);
             end
-            
-            h=figure(m);
-            hold on
+
+            global selections 
+            if selections.plotSO==1
+                if k ==1
+                listR=YquantitiesLabel;
+                [indx,tf] = listdlg('PromptString','Select the muscles','ListString',listR);
+                end
+            YquantitiesLabel = YquantitiesLabel(indx);
+            coord_idx=coord_idx(indx);
+            end
+%             
+%             h=figure(m);
+%             hold on
+%             icolor=1;
+%             iline=1;
+%             save_to_base(1)
+            for j =1: size(coord_idx,2)
+            h{j}=figure(j);
             icolor=1;
             iline=1;
             save_to_base(1)
-            for j =1: nMuscles
-                
+            
                 coordCol=coord_idx(j);
                 
                 y = results(:,coordCol);
@@ -89,16 +103,33 @@ for k=1:nTrials
                 end
                 
                 xlabel(xaxislabel)
-                %ylabel(plotLabels(j))
+                ylabel(YquantitiesLabel{j})
                 warning off
-                legend(YquantitiesLabel)
+                legend(YquantitiesLabel{j})
                 
-                
+            saveas(h{j},[figurePath musclesGroups{m}.muscle{j} '.fig'])  
             end
             
-            saveas(h,[figurePath musclesGroups{m}.name '.fig'])  
+%             saveas(h,[figurePath musclesGroups{m}.name '.fig'])  
    %       saveas(h,[figurePath musclesGroups{m}.name '.png'])    
-            close(h)
+%             close(h)
+close all
         end
     end
 end
+originalPath=pwd;
+filesPath{1};
+cd(filesPath{1})
+cd('..')
+resultsPath=cd;
+cd(originalPath)
+trialsList = selections.trials(selections.ListTrials);
+if strcmp(selections.SOselectplot, 'Force')
+filename = ['_StaticOptimization_force.sto'];
+elseif strcmp(selections.SOselectplot, 'Activation')
+filename = ['_StaticOptimization_activation.sto'];
+end
+resultsPath = regexprep(resultsPath, '\\', '\');
+YquantitiesLabel = regexprep(YquantitiesLabel, ' ', '_');
+plotResultsMultipleTrials(resultsPath, trialsList,filename,xaxislabel, YquantitiesLabel)
+close all 

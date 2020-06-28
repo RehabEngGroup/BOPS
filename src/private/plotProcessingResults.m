@@ -67,11 +67,11 @@ for k=1:length(filesPath)
         hold on
         
         plot(timeVector, y);
-        title(filenameTitle)
+        title(file.colheaders{coordCol})
         hold off
         
         xlabel(xaxislabel)
-        ylabel(plotLabels(j))
+        ylabel(file.colheaders{coordCol})
         
         saveas(h,[figurePath file.colheaders{coordCol} '.fig'])
         close(h)
