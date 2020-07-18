@@ -10,7 +10,7 @@ A MATLAB graphical user interface (GUI) is available to simplify the execution o
 BOPS stores its outputs in folders that are automatically created. These folders integrate perfectly in the structure provided by MOtoNMS software (<https://simtk.org/home/motonms>). We designed the two tools to work in close cooperation to transform the data collected in a motion analysis laboratory into inputs for OpenSim and CEINMS (<https://simtk.org/home/ceinms>) tools.
  
 ## Latest Version ##
-BOPS is an open project, released under Apache v2.0 License and hosted in [GitHub] [1]. 
+BOPS is an open project, released under Apache v2.0 License and hosted in [GitHub][1]. 
 An archive of the latest release is freely available from the SimTK project page: 
 <https://simtk.org/home/bops> together with a dataset to play with. 
 
@@ -20,7 +20,7 @@ For a complete overview on how to use BOPS v2.0, a tutorial video can be downloa
 
 ## Installation ##
 
-1. Configure MATLAB for the use of OpenSim API (follow the instructions available [here] [3])
+1. Configure MATLAB for the use of OpenSim API (follow the instructions available [here][3])
 
 2. Unzip the archive of BOPS (available [here][2]) 
 

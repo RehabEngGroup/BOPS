@@ -18,4 +18,5 @@ _July 18, 2020_
 - Bug associated with toolbox being re-run
 
 
-### Initial Release (v0.9) ###
+
+## Initial Release (v0.9) ##
