@@ -1,13 +1,13 @@
 BOPS (Batch OpenSim Processing Scripts)
 =======================================
 
-BOPS performs batch processing of common OpenSim procedures (**Inverse Kinematics** - IK, **Inverse Dynamics** - ID, **Muscle Analysis** - MA, and **Static Optimization** - SO) and stores output, logging information, setup files, and plots in an ordered structure of folders. 
+BOPS performs batch processing of common OpenSim procedures (**Inverse Kinematics** - IK, **Inverse Dynamics** - ID, **Muscle Analysis** - MA, **Static Optimization** - SO, and **Joint Reaction Analysis** - JRA) and stores output, logging information, setup files, and plots in an ordered structure of folders. 
 
-We implemented BOPS using OpenSim APIs, that receive the following information through setup files: (i) weight of each marker (IK); (ii) external loads (ID); (iii) whether moment arms should be computed (MA); (iv) configuration of Static Optimization through the Analyze Tool, and actuators (SO); (v) muscle groups of interest (plotting). We provide already few setup files but the user is in charge of defining appropriate configuration for the data. 
+We implemented BOPS using OpenSim APIs, that receive the following information through setup files: (i) name and weight of each marker (IK); (ii) external loads (ID); (iii) muscles and moment arms of interest (MA); (iv) static optimization conditions and muscle actuators loads (SO); (v) joints of interest (JRA). The user is in charge of defining the appropriate configuration for its data, but we already provide several templates for each setup file to speed up their customization.
 
-A MATLAB graphical user interface (GUI) is available to customize the execution of procedures. The use of the GUI is not limited in selecting the setup files. The user can also select: (i) the OpenSim procedures to execute, (ii) the trials to process, (iii) the cut-off frequencies for coordinate filtering, (iv) the coordinates/joint moments/muscles properties to plot and the x-axis label. 
+A MATLAB graphical user interface (GUI) is available to simplify the execution of procedures. The use of the GUI is not limited in selecting the setup files. The user can also input: (i) the OpenSim procedures to execute, (ii) the trials to process, (iii) the OpenSim model to use on the simulations, (iv) the cut-off frequencies for the filtering, (v) the residual actuators, (vi) the output variables to plot and the x-axis label. 
 
-BOPS stores its outputs in folders that are automatically created. These folders integrate perfectly in the structure provided by MOtoNMS software (<https://simtk.org/home/motonms>). We designed the two tools to work in close cooperation to transform the data collected in a motion analysis laboratory in inputs for OpenSim and CEINMS (<https://simtk.org/home/ceinms>) tools.
+BOPS stores its outputs in folders that are automatically created. These folders integrate perfectly in the structure provided by MOtoNMS software (<https://simtk.org/home/motonms>). We designed the two tools to work in close cooperation to transform the data collected in a motion analysis laboratory into inputs for OpenSim and CEINMS (<https://simtk.org/home/ceinms>) tools.
  
 ## Latest Version ##
 BOPS is an open project, released under Apache v2.0 License and hosted in [GitHub] [1]. 
@@ -15,8 +15,8 @@ An archive of the latest release is freely available from the SimTK project page
 <https://simtk.org/home/bops> together with a dataset to play with. 
 
 ## Documentation ##
-A PDF version of the BOPS User Manual will soon be uploaded in <https://simtk.org/home/bops>.
-Meanwhile, please refer to this README for a basic introduction.
+For a first introduction, please refer to this README file.
+For a complete overview on how to use BOPS v2.0, a tutorial video can be downloaded from the SimTK project page.
 
 ## Installation ##
 
@@ -27,8 +27,8 @@ Meanwhile, please refer to this README for a basic introduction.
 This release includes three directories:
 
 - `src`:        BOPS source code
-- `Templates`:  XML setup files for OpenSim IK, ID, MA, SO tools, and for configuration of output plots .
-- `TestData`:   Example datasets from three different laboratories. Users are provided with the same data available in MOtoNMS (available also [here][4]) plus scaled .osim models.
+- `Templates`:  XML setup files for OpenSim IK, ID, MA, SO, JRA tools, and for configuration of output plots.
+- `TestData`:   Example datasets from different laboratories. Users are provided with the same data available in MOtoNMS (available also [here][4]) plus scaled .osim models.
 
 ## Execution ##
 
@@ -38,7 +38,7 @@ This release includes three directories:
 2. Run `BOPSgui.m`
 
 ##### How to set the processing input  #####
-BOPS requires an input folder for its execution. Please select a folder in the dynamicElaborations folder created by MOtoNMS tool. If you are not familiar with this folder structure you can refer to the [MOtoNMS User Manual] [5].
+BOPS requires an input folder for its execution. Please select a dynamicElaborations folder created by MOtoNMS tool (or set it manually). If you are not familiar with this folder structure you can refer to the [MOtoNMS User Manual] [5].
 
 ### Advanced use ###
 The use of the GUI is not mandatory. Advanced users can create a `main.m` script and call directly the functions. An example with some notes is provided.
@@ -48,9 +48,10 @@ The use of the GUI is not mandatory. Advanced users can create a `main.m` script
 - File Paths **MUST NOT** include blank spaces due to a limitation in OpenSim SO.
 
 ## Contacts ##
-- If you need help using BOPS, please ask your questions in the BOPS Public Forum, available from the SimTK project page: <https://simtk.org/home/bops>, or send an email to <ali.mantoan@gmail.com> and <monica.reggiani@gmail.com>
-- You can send BOPS bug reports to <ali.mantoan@gmail.com>, <monica.reggiani@gmail.com>
-- If you want to participate in developing BOPS, please send an email to <monica.reggiani@gmail.com>
+- If you need help using BOPS, please ask your questions in the BOPS Public Forum, available from the SimTK project page: <https://simtk.org/home/bops>, or send an email to <ali.mantoan@gmail.com> and <bruno.bedo@usp.br>
+- You can send BOPS bug reports to <ali.mantoan@gmail.com>, <bruno.bedo@usp.br>
+- For any ideas about potential improvement or custom needs, please contact <danilo.catelli@uottawa.ca> and <ali.mantoan@gmail.com>
+- If you want to participate in developing BOPS and/or you are interested in collaborations, please send an email to <monica.reggiani@gmail.com>, <danilo.catelli@uottawa.ca> and <mlamon@uottawa.ca>
 
 ## Redistribution: Terms and Conditions ##
 
